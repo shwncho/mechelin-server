@@ -1,6 +1,6 @@
-<img width="266" alt="미슐랭" src="https://user-images.githubusercontent.com/88089316/149492971-00cafd32-c265-4ca9-84c0-5aec16510b77.png">
-
-
+<div align=center>
+  <img width="266" alt="미슐랭" src="https://user-images.githubusercontent.com/88089316/149492971-00cafd32-c265-4ca9-84c0-5aec16510b77.png">
+</div>
 
 
 ## ✨License
