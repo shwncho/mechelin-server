@@ -35,6 +35,14 @@ public class UserService {
         if (userProvider.checkEmail(postUserReq.getEmail()) == 1) {
             throw new BaseException(POST_USERS_EXISTS_EMAIL);
         }
+        if (userProvider.checkNickName(postUserReq.getNickName()) == 1){
+            throw new BaseException(POST_USERS_EXISTS_NICKNAME);
+
+        }
+        if (userProvider.checkPhoneNumber(postUserReq.getPhoneNumber()) == 1){
+            throw new BaseException(POST_USERS_EXISTS_PHONENUMBER);
+        }
+
         String pwd;
         try {
             pwd = new AES128(Secret.USER_INFO_PASSWORD_KEY).encrypt(postUserReq.getPassword());

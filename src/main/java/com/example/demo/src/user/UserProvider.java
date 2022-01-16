@@ -55,4 +55,21 @@ public class UserProvider {
         }
     }
 
+    public int checkNickName(String nickname) throws BaseException{
+        try{
+            return userDao.checkNickName(nickname);
+        } catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+    public int checkPhoneNumber(String phonenumber) throws BaseException{
+        try{
+            return userDao.checkPhoneNumber(phonenumber);
+        } catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+
+
 }

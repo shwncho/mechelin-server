@@ -23,8 +23,8 @@ public class UserDao {
     }
 
     public int createUser(PostUserReq postUserReq) {
-        String createUserQuery = "insert into User (email, password, nickname) VALUES (?,?,?)";
-        Object[] createUserParams = new Object[]{postUserReq.getEmail(), postUserReq.getPassword(), postUserReq.getNickname()};
+        String createUserQuery = "insert into User (email, password, nickName,phoneNumber) VALUES (?,?,?,?)";
+        Object[] createUserParams = new Object[]{postUserReq.getEmail(), postUserReq.getPassword(), postUserReq.getNickName(),postUserReq.getPhoneNumber()};
         this.jdbcTemplate.update(createUserQuery, createUserParams);
 
         String lastInserIdQuery = "select last_insert_id()";
@@ -37,6 +37,22 @@ public class UserDao {
         return this.jdbcTemplate.queryForObject(checkEmailQuery,
                 int.class,
                 checkEmailParams);
+    }
+
+    public int checkNickName(String nickname) {
+        String checkNickNameQuery = "select exists(select nickName from User where nickName = ?)";
+        String checkNickNameParams = nickname;
+        return this.jdbcTemplate.queryForObject(checkNickNameQuery,
+                int.class,
+                checkNickNameParams);
+    }
+
+    public int checkPhoneNumber(String phonenumber) {
+        String checkPhoneNumberQuery = "select exists(select phoneNumber from User where phoneNumber = ?)";
+        String checkPhoneNumberParams = phonenumber;
+        return this.jdbcTemplate.queryForObject(checkPhoneNumberQuery,
+                int.class,
+                checkPhoneNumberParams);
     }
 
     // 로그인: 해당 email에 해당되는 user의 암호화된 비밀번호 값을 가져온다.
