@@ -57,15 +57,14 @@ public class UserDao {
 
     // 로그인: 해당 email에 해당되는 user의 암호화된 비밀번호 값을 가져온다.
     public User getPwd(PostLoginReq postLoginReq) {
-        String getPwdQuery = "select userIdx, password,email,nickname from User where email = ?";
+        String getPwdQuery = "select userIdx, password,email from User where email = ?";
         String getPwdParams = postLoginReq.getEmail();
 
         return this.jdbcTemplate.queryForObject(getPwdQuery,
                 (rs, rowNum) -> new User(
                         rs.getInt("userIdx"),
                         rs.getString("email"),
-                        rs.getString("password"),
-                        rs.getString("nickname")
+                        rs.getString("password")
                 ),
                 getPwdParams
         );
