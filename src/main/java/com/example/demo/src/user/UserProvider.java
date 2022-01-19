@@ -9,6 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 import static com.example.demo.config.BaseResponseStatus.*;
 
@@ -27,8 +29,12 @@ public class UserProvider {
         this.jwtService = jwtService;
     }
 
-
+    @Transactional(readOnly = true)
     public PostLoginRes logIn(PostLoginReq postLoginReq) throws BaseException {
+        if(checkEmail(postLoginReq.getEmail())==0){
+            throw new BaseException(POST_USERS_EMPTY_EMAIL);
+        }
+
         User user = userDao.getPwd(postLoginReq);
         String password;
         try {
@@ -46,7 +52,7 @@ public class UserProvider {
             throw new BaseException(FAILED_TO_LOGIN);
         }
     }
-
+    @Transactional(readOnly = true)
     public int checkEmail(String email) throws BaseException {
         try {
             return userDao.checkEmail(email);
@@ -54,5 +60,23 @@ public class UserProvider {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+    @Transactional(readOnly = true)
+    public int checkNickName(String nickname) throws BaseException{
+        try{
+            return userDao.checkNickName(nickname);
+        } catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+    @Transactional(readOnly = true)
+    public int checkPhoneNumber(String phonenumber) throws BaseException{
+        try{
+            return userDao.checkPhoneNumber(phonenumber);
+        } catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+
 
 }

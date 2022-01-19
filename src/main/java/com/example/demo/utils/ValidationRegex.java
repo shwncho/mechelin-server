@@ -12,6 +12,27 @@ public class ValidationRegex {
         return matcher.find();
     }
 
+    public static boolean isRegexPassWord(String target){
+        String regex = "^(?=.*\\d)(?=.*[a-zA-Z])[0-9a-zA-Z]{6,12}"; // 비밀번호 영문과 숫자조합 6~12자리
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(target);
+        return matcher.find();
+    }
+
+    public static boolean isRegexNickName(String target){
+        String regex = "^[가-힣]{1,6}$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(target);
+        return matcher.find();
+    }
+
+    public static boolean isRegexPhoneNumber(String target){
+        String regex = "^\\d{3}-\\d{3,4}-\\d{4}$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(target);
+        return matcher.find();
+    }
+
     // 날짜 형식, 전화 번호 형식 등 여러 Regex 인터넷에 검색하면 나옴.
 }
 

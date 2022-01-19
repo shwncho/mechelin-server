@@ -21,14 +21,21 @@ public enum BaseResponseStatus {
     EMPTY_JWT(false, 2001, "JWT를 입력해주세요."),
     INVALID_JWT(false, 2002, "유효하지 않은 JWT입니다."),
     INVALID_USER_JWT(false,2003,"권한이 없는 유저의 접근입니다."),
+    NULL_ERROR(false,2004,"공백을 허용하지 않습니다."),
 
     // users
     USERS_EMPTY_USER_ID(false, 2010, "유저 아이디 값을 확인해주세요."),
 
     // [POST] /users
-    POST_USERS_EMPTY_EMAIL(false, 2015, "이메일을 입력해주세요."),
+    POST_USERS_EMPTY_EMAIL(false, 2015, "존재하지 않는 이메일입니다."),
     POST_USERS_INVALID_EMAIL(false, 2016, "이메일 형식을 확인해주세요."),
     POST_USERS_EXISTS_EMAIL(false,2017,"중복된 이메일입니다."),
+    POST_USERS_EXISTS_NICKNAME(false,2018,"중복된 닉네임입니다."),
+    POST_USERS_EXISTS_PHONENUMBER(false,2019,"중복된 휴대폰 번호 입니다."),
+    POST_USERS_INVALID_PASSWORD(false,2020,"비밀번호 형식을 확인해주세요."),
+    POST_USERS_INVALID_NICKNAME(false, 2021,"닉네임 형식을 확인해주세요."),
+    POST_USERS_INVALID_PHONENUMBER(false,2022,"휴대폰 번호 형식을 확인해주세요."),
+
 
 
 
@@ -40,7 +47,7 @@ public enum BaseResponseStatus {
 
     // [POST] /users
     DUPLICATED_EMAIL(false, 3013, "중복된 이메일입니다."),
-    FAILED_TO_LOGIN(false,3014,"없는 아이디거나 비밀번호가 틀렸습니다."),
+    FAILED_TO_LOGIN(false,3014,"비밀번호가 틀렸습니다."),
 
 
 

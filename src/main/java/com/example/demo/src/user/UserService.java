@@ -11,6 +11,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.transaction.annotation.Transactional;
+
 import javax.sql.DataSource;
 import static com.example.demo.config.BaseResponseStatus.*;
 
@@ -31,10 +33,19 @@ public class UserService {
         this.jwtService = jwtService;
 
     }
+    @Transactional
     public PostUserRes createUser(PostUserReq postUserReq) throws BaseException {
         if (userProvider.checkEmail(postUserReq.getEmail()) == 1) {
             throw new BaseException(POST_USERS_EXISTS_EMAIL);
         }
+        if (userProvider.checkNickName(postUserReq.getNickName()) == 1){
+            throw new BaseException(POST_USERS_EXISTS_NICKNAME);
+
+        }
+        if (userProvider.checkPhoneNumber(postUserReq.getPhoneNumber()) == 1){
+            throw new BaseException(POST_USERS_EXISTS_PHONENUMBER);
+        }
+
         String pwd;
         try {
             pwd = new AES128(Secret.USER_INFO_PASSWORD_KEY).encrypt(postUserReq.getPassword());

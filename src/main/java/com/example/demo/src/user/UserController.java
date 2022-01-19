@@ -13,7 +13,7 @@ import java.util.List;
 
 
 import static com.example.demo.config.BaseResponseStatus.*;
-import static com.example.demo.utils.ValidationRegex.isRegexEmail;
+import static com.example.demo.utils.ValidationRegex.*;
 
 @RestController
 @RequestMapping("users")
@@ -43,9 +43,26 @@ public class UserController {
         if (postUserReq.getEmail() == null) {
             return new BaseResponse<>(POST_USERS_EMPTY_EMAIL);
         }
+
         if (!isRegexEmail(postUserReq.getEmail())) {
             return new BaseResponse<>(POST_USERS_INVALID_EMAIL);
         }
+        if (postUserReq.getPassword().contains(" ")){
+            return new BaseResponse<>(NULL_ERROR);
+        }
+        if (!isRegexPassWord(postUserReq.getPassword())){
+            return new BaseResponse<>(POST_USERS_INVALID_PASSWORD);
+        }
+        if(postUserReq.getNickName().contains(" ")){
+            return new BaseResponse<>(NULL_ERROR);
+        }
+        if (!isRegexNickName(postUserReq.getNickName())){
+            return new BaseResponse<>(POST_USERS_INVALID_NICKNAME);
+        }
+        if (!isRegexPhoneNumber(postUserReq.getPhoneNumber())){
+            return new BaseResponse<>(POST_USERS_INVALID_PHONENUMBER);
+        }
+
         try {
             PostUserRes postUserRes = userService.createUser(postUserReq);
             return new BaseResponse<>(postUserRes);
@@ -57,6 +74,13 @@ public class UserController {
     @ResponseBody
     @PostMapping("/log-in")
     public BaseResponse<PostLoginRes> logIn(@RequestBody PostLoginReq postLoginReq) {
+        if (postLoginReq.getEmail() == null) {
+            return new BaseResponse<>(NULL_ERROR);
+        }
+        if (!isRegexEmail(postLoginReq.getEmail())) {
+            return new BaseResponse<>(POST_USERS_INVALID_EMAIL);
+        }
+
         try {
             PostLoginRes postLoginRes = userProvider.logIn(postLoginReq);
             return new BaseResponse<>(postLoginRes);
