@@ -36,9 +36,6 @@ public enum BaseResponseStatus {
     POST_USERS_INVALID_NICKNAME(false, 2021,"닉네임 형식을 확인해주세요."),
     POST_USERS_INVALID_PHONENUMBER(false,2022,"휴대폰 번호 형식을 확인해주세요."),
 
-
-
-
     /**
      * 3000 : Response 오류
      */
@@ -48,7 +45,6 @@ public enum BaseResponseStatus {
     // [POST] /users
     DUPLICATED_EMAIL(false, 3013, "중복된 이메일입니다."),
     FAILED_TO_LOGIN(false,3014,"비밀번호가 틀렸습니다."),
-
 
 
     /**
@@ -64,7 +60,6 @@ public enum BaseResponseStatus {
 
     // 5000 : 필요시 만들어서 쓰세요
     // 6000 : 필요시 만들어서 쓰세요
-
 
     private final boolean isSuccess;
     private final int code;
