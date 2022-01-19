@@ -7,7 +7,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 
-public class GetCategoryRes {
+public class GetStoreRes {
     private int storeIdx;           // 가게 Index
     private String imageUrl;        // 리뷰 대표 이미지 URL
     private String storeName;       // 가게 이름

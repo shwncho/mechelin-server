@@ -7,19 +7,18 @@ import org.springframework.stereotype.Service;
 
 @Service
 
-public class CategoryService {
+public class StoreService {
 
     final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    private final CategoryDao categoryDao;
-    private final CategoryProvider categoryProvider;
+    private final StoreDao storeDao;
+    private final StoreProvider storeProvider;
 
     @Autowired
-    public CategoryService(CategoryDao categoryDao, CategoryProvider categoryProvider) {
-        this.categoryDao = categoryDao;
-        this.categoryProvider = categoryProvider;
+    public StoreService(StoreDao storeDao, StoreProvider storeProvider) {
+        this.storeDao = storeDao;
+        this.storeProvider = storeProvider;
     }
 
     // ******************************************************************************
-
 }
