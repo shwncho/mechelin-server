@@ -36,8 +36,7 @@ public enum BaseResponseStatus {
     POST_USERS_INVALID_NICKNAME(false, 2021,"닉네임 형식을 확인해주세요."),
     POST_USERS_INVALID_PHONENUMBER(false,2022,"휴대폰 번호 형식을 확인해주세요."),
 
-
-
+    
 
     /**
      * 3000 : Response 오류
