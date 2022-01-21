@@ -43,10 +43,15 @@ public class UserProvider {
             throw new BaseException(PASSWORD_DECRYPTION_ERROR);
         }
 
-        if (postLoginReq.getPassword().equals(password)) { //비말번호가 일치한다면 userIdx를 가져온다.
-            int userIdx = userDao.getPwd(postLoginReq).getUserIdx();
-            String jwt = jwtService.createJwt(userIdx);
-            return new PostLoginRes(userIdx,jwt);
+        if (postLoginReq.getPassword().equals(password)) {
+            if(checkStatus(postLoginReq.getEmail())== "A") {
+                int userIdx = userDao.getPwd(postLoginReq).getUserIdx();
+                String jwt = jwtService.createJwt(userIdx);
+                return new PostLoginRes(userIdx, jwt);
+            }
+            else{
+                throw new BaseException(POST_USERS_INACTIVE_ACCOUNT);
+            }
 
         } else {
             throw new BaseException(FAILED_TO_LOGIN);
@@ -74,6 +79,24 @@ public class UserProvider {
             return userDao.checkPhoneNumber(phonenumber);
         } catch (Exception exception){
             throw new BaseException(DATABASE_ERROR);
+        }
+    }
+    @Transactional(readOnly = true)
+    public String checkStatus(String email) throws BaseException{
+        try{
+            return userDao.checkStatus(email);
+        } catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public GetProfileRes getProfile(int userIdx) throws BaseException{
+        try {
+            GetProfileRes getProfileRes = userDao.getProfile(userIdx);
+            return getProfileRes;
+        } catch (Exception exception){
+        throw new BaseException(DATABASE_ERROR);
         }
     }
 

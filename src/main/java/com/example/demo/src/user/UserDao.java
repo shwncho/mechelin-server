@@ -54,6 +54,11 @@ public class UserDao {
                 int.class,
                 checkPhoneNumberParams);
     }
+    public String checkStatus(String email){
+        String checkStatusQuery = "SELECT status FROM User WHERE email=?";
+        String checkStatusParams = email;
+        return this.jdbcTemplate.queryForObject(checkStatusQuery,String.class,checkStatusParams);
+    }
 
     // 로그인: 해당 email에 해당되는 user의 암호화된 비밀번호 값을 가져온다.
     public User getPwd(PostLoginReq postLoginReq) {
@@ -68,6 +73,26 @@ public class UserDao {
                 ),
                 getPwdParams
         );
+    }
+
+    // 프로필: 해당 User의 프로필 페이지를 조회한다.
+    public GetProfileRes getProfile(int userIdx){
+        String getProfileQuery= "SELECT u.nickName, u.email, count(distinct s.storeIdx) as `storeCnt`, count(r.reviewIdx) as `reviewCnt`\n" +
+                "    FROM User as u\n" +
+                "        INNER JOIN Review as r\n" +
+                "            ON r.userIdx = u.userIdx\n" +
+                "        INNER JOIN Store as s\n" +
+                "            ON s.storeIdx = r.storeIdx\n" +
+                "    WHERE u.userIdx=? AND s.status='A' AND r.status='A'";
+        int getProfileParams = userIdx;
+
+        return this.jdbcTemplate.queryForObject(getProfileQuery,
+                (rs, rowNum) -> new GetProfileRes(
+                        rs.getString("nickName"),
+                        rs.getString("email"),
+                        rs.getInt("storeCnt"),
+                        rs.getInt("reviewCnt")),
+                getProfileParams);
     }
 
 
