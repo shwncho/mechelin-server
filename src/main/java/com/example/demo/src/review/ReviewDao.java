@@ -1,6 +1,6 @@
 package com.example.demo.src.review;
 
-import com.example.demo.src.review.model.GetMainScreenReviewRes;
+import com.example.demo.src.review.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
