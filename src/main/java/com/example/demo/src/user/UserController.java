@@ -72,7 +72,7 @@ public class UserController {
     }
 
     @ResponseBody
-    @PostMapping("/log-in")
+    @PostMapping("/sign-in")
     public BaseResponse<PostLoginRes> logIn(@RequestBody PostLoginReq postLoginReq) {
         if (postLoginReq.getEmail() == null) {
             return new BaseResponse<>(NULL_ERROR);
