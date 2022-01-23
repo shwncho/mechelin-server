@@ -34,6 +34,7 @@ public class SearchController {
 
     // ************************************************************************************
 
+    // 유저가 저장한 식당 검색 By 식당 이름, 해시태그
     @ResponseBody
     @GetMapping("/search")
     public BaseResponse<GetSearchRes> getSearch(@RequestParam("keyword") String keyword) {
@@ -48,7 +49,7 @@ public class SearchController {
         }
     }
 
-    //페이징 처리
+    // 검색한 해시태그 클릭 시 해당 해시태그를 가진 식당들의 정보 조회
     @ResponseBody
     @GetMapping("/search/hashtag/{tagIdx}")
     public BaseResponse<List<GetStoreRes>> getStoresByHashTag(@PathVariable("tagIdx") int tagIdx, int pageNo) {
