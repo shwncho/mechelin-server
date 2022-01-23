@@ -2,7 +2,7 @@ package com.example.demo.src.store;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
-import com.example.demo.src.store.model.GetStoreRes;
+import com.example.demo.src.store.model.*;
 import com.example.demo.utils.JwtService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,4 +61,24 @@ public class StoreController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
+
+
+    /**
+     *지도의 전체가게 조회
+     *[GET] /stores
+     */
+    @ResponseBody
+    @GetMapping("")
+
+    public BaseResponse<List<GetStoresRes>> getStores(){
+        try{
+            int userIdx = jwtService.getUserIdx();
+            List<GetStoresRes> getStoresRes = storeProvider.getStores(userIdx);
+            return new BaseResponse<>(getStoresRes);
+        } catch (BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+
+    }
+
 }

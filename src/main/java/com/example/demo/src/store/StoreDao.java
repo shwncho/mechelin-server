@@ -343,4 +343,21 @@ public class StoreDao {
                         rs.getString("address")),
                 params);
     }
+
+    public List<GetStoresRes> getStores(int userIdx){
+        String getStoresquery= "SELECT distinct s.storeIdx, x,y\n" +
+                "    FROM Store as s\n" +
+                "        INNER JOIN Review as r\n" +
+                "            ON r.storeIdx = s.storeIdx\n" +
+                "        INNER JOIN User as u\n" +
+                "            ON u.userIdx = r.userIdx\n" +
+                "    WHERE u.userIdx=? AND s.status='A'";
+        int getStoresParams = userIdx;
+        return this.jdbcTemplate.query(getStoresquery,
+                (rs, rowNum) -> new GetStoresRes(
+                        rs.getInt("storeIdx"),
+                        rs.getDouble("x"),
+                        rs.getDouble("y")),
+                getStoresParams);
+    }
 }

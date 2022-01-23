@@ -88,6 +88,19 @@ public class UserController {
             return new BaseResponse<>(exception.getStatus());
         }
     }
+
+    @ResponseBody
+    @GetMapping("/profile")
+    public BaseResponse<GetProfileRes> getProfile(){
+        try{
+            int userIdx = jwtService.getUserIdx();
+            GetProfileRes getProfileRes = userProvider.getProfile(userIdx);
+            return new BaseResponse<>(getProfileRes);
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
 }
 
 

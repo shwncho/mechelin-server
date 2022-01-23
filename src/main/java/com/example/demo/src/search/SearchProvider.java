@@ -64,18 +64,13 @@ public class SearchProvider {
 
     // 해시태그 검색 결과 확인
     @Transactional(readOnly = true)
-/*    public List<GetStoreRes> getStoresByHashtag(int userIdx, int tagIdx, int pageNo) throws BaseException {
+    public List<GetStoreRes> getStoresByHashtag(int userIdx, int tagIdx, int pageNo) throws BaseException {
         try {
             List<GetStoreRes> getStoresByHashtag = searchDao.getStoresByHashtag(userIdx, tagIdx, pageNo);
             return getStoresByHashtag;
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }
-    }*/
-
-    public List<GetStoreRes> getStoresByHashtag(int userIdx, int tagIdx, int pageNo) throws BaseException {
-            List<GetStoreRes> getStoresByHashtag = searchDao.getStoresByHashtag(userIdx, tagIdx, pageNo);
-            return getStoresByHashtag;
-
     }
+
 }
