@@ -56,7 +56,6 @@ public class SearchDao {
         return this.jdbcTemplate.queryForObject(checkHashtagQuery, int.class, checkHashtagParam);   // 해당 문자열이 해시태그에 존재한다면 1을 반환
     }
 
-
     // 입력 받은 문자열이 해시태그인 경우 해당 해시태그에 대한 식당들의 개수 반환
     public List<GetSearchByHashtag> countByHashTag(int userIdx, String keyword) {
         String query = "select T.tagIdx, T.tagName, count(S.storeIdx) as count " +
