@@ -62,6 +62,7 @@ public class SearchProvider {
     }
 
 
+
     // 해시태그 검색 결과 확인
     @Transactional(readOnly = true)
     public List<GetStoreRes> getStoresByHashtag(int userIdx, int tagIdx, int pageNo) throws BaseException {

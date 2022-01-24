@@ -41,7 +41,7 @@ public class StoreController {
     @ResponseBody
     @GetMapping("/category")
 
-    public BaseResponse<List<GetStoreRes>> getCategory (@RequestParam("categoryIdx") int categoryIdx, @RequestParam(value="starRating", required = false, defaultValue = "N") String starRating, @RequestParam(value = "deliveryService", required = false, defaultValue = "N") String deliveryService, int pageNo) {
+    public BaseResponse<List<GetStoreRes>> getCategory (@RequestParam("categoryIdx") int categoryIdx, @RequestParam(value="starRating", required = false, defaultValue = "N") String starRating, @RequestParam(value = "deliveryService", required = false, defaultValue = "N") String deliveryService, @RequestParam(defaultValue = "1") int pageNo) {
         try {
             int userIdx = jwtService.getUserIdx();
 

@@ -49,6 +49,7 @@ public class SearchController {
         }
     }
 
+
     // 검색한 해시태그 클릭 시 해당 해시태그를 가진 식당들의 정보 조회
     @ResponseBody
     @GetMapping("/search/hashtag/{tagIdx}")

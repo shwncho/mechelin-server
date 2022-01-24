@@ -85,7 +85,7 @@ public class SearchDao {
     public List<GetStoreRes> getStoresByHashtag(int userIdx, int tagIdx, int pageNo) {
         String query = "select S.storeIdx, RI.imageUrl as imageUrl, S.storeName, R.starRate, T.tagName as tag, substring_index(S.address, ' ', 2) as address " +
                         "from ( " +
-                        "        select min(reviewIdx) as reviewIdx, userIdx, storeIdx, ROUND(AVG(starRate), 1) as starRate " +
+                        "        select min(reviewIdx) as reviewIdx, userIdx, storeIdx, ROUND(AVG(starRate), 1) as starRate , createdAt " +
                         "        from Review " +
                         "         group by storeIdx, userIdx, reviewIdx " +
                         "     ) as R, " +
@@ -104,6 +104,7 @@ public class SearchDao {
                         "    and R.userIdx = ? " +
                         "    and S.status = 'A' " +
                         "    and T.tagIdx = ? " +
+                        "order by R.createdAt DESC " +
                         "limit ?, 12";  // 식당 정보 12개씩 보이기
         Object[] params = new Object[]{userIdx, tagIdx, (pageNo-1)*12};
         return this.jdbcTemplate.query(query,

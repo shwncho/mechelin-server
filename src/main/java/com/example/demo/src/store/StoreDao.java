@@ -54,6 +54,7 @@ public class StoreDao {
                 "and R.reviewIdx = RT.reviewIdx " +
                 "and RT.tagIdx = T.tagIdx " +
                 "and R.userIdx = ? " +
+                "and S.status = 'A' " +
                 "group by R.reviewIdx, R.createdAt " +
                 "order by R.createdAt DESC " +
                 "limit ?, 12 ";  // 12개씩 보이기
@@ -83,7 +84,7 @@ public class StoreDao {
                 "group by reviewIdx " +
                 ") as RI, " +
                 "( " +
-                "select storeIdx, storeName, address " +
+                "select storeIdx, storeName, address, status " +
                 "from Store " +
                 "where deliveryService = ? " +
                 ") as S, " +
@@ -94,6 +95,7 @@ public class StoreDao {
                 "and R.reviewIdx = RT.reviewIdx " +
                 "and RT.tagIdx = T.tagIdx " +
                 "and R.userIdx = ? " +
+                "and S.status = 'A' " +
                 "group by R.reviewIdx, R.createdAt " +
                 "order by R.createdAt DESC " +
                 "limit ?, 12 ";  // 12개씩 보이기
@@ -131,6 +133,7 @@ public class StoreDao {
                 "and RT.tagIdx = T.tagIdx " +
                 "and R.userIdx = ? " +
                 "and R.categoryIdx = ? " +
+                "and S.status = 'A' " +
                 "group by R.reviewIdx, R.createdAt " +
                 "order by R.createdAt DESC " +
                 "limit ?, 12 ";  // 12개씩 보이기
@@ -160,7 +163,7 @@ public class StoreDao {
                 "group by reviewIdx " +
                 ") as RI, " +
                 "( " +
-                "select storeIdx, storeName, address " +
+                "select storeIdx, storeName, address, status " +
                 "from Store " +
                 "where deliveryService = ? " +
                 ") as S, " +
@@ -172,6 +175,7 @@ public class StoreDao {
                 "and RT.tagIdx = T.tagIdx " +
                 "and R.userIdx = ? " +
                 "and R.categoryIdx = ? " +
+                "and S.status = 'A' " +
                 "group by R.reviewIdx, R.createdAt " +
                 "order by R.createdAt DESC " +
                 "limit ?, 12 ";  // 12개씩 보이기
@@ -211,8 +215,9 @@ public class StoreDao {
                 "and R.reviewIdx = RT.reviewIdx " +
                 "and RT.tagIdx = T.tagIdx " +
                 "and R.userIdx = ? " +
+                "and S.status = 'A' " +
                 "group by R.reviewIdx, R.starRate " +
-                "order by R.starRate DESC " +
+                "order by R.starRate DESC, S.storeName " +
                 "limit ?, 12 ";  // 12개씩 보이기
         Object[] params = new Object[]{userIdx, (pageNo-1)*12};
         return this.jdbcTemplate.query(query,
@@ -240,7 +245,7 @@ public class StoreDao {
                 "group by reviewIdx " +
                 ") as RI, " +
                 "( " +
-                "select storeIdx, storeName, address " +
+                "select storeIdx, storeName, address, status " +
                 "from Store " +
                 "where deliveryService = ? " +
                 ") as S, " +
@@ -251,8 +256,9 @@ public class StoreDao {
                 "and R.reviewIdx = RT.reviewIdx " +
                 "and RT.tagIdx = T.tagIdx " +
                 "and R.userIdx = ? " +
+                "and S.status = 'A' " +
                 "group by R.reviewIdx, R.starRate " +
-                "order by R.starRate DESC " +
+                "order by R.starRate DESC, S.storeName " +
                 "limit ?, 12 ";  // 12개씩 보이기
         Object[] params = new Object[]{deliveryService, userIdx, (pageNo-1)*12};
         return this.jdbcTemplate.query(query,
@@ -288,8 +294,9 @@ public class StoreDao {
                 "and RT.tagIdx = T.tagIdx " +
                 "and R.userIdx = ? " +
                 "and R.categoryIdx = ? " +
+                "and S.status = 'A' " +
                 "group by R.reviewIdx, R.starRate " +
-                "order by R.starRate DESC " +
+                "order by R.starRate DESC, S.storeName " +
                 "limit ?, 12 ";  // 12개씩 보이기
         Object[] params = new Object[]{userIdx, categoryIdx, (pageNo-1)*12};
         return this.jdbcTemplate.query(query,
@@ -317,7 +324,7 @@ public class StoreDao {
                 "group by reviewIdx " +
                 ") as RI, " +
                 "( " +
-                "select storeIdx, storeName, address " +
+                "select storeIdx, storeName, address, status " +
                 "from Store " +
                 "where deliveryService = ? " +
                 ") as S, " +
@@ -329,8 +336,9 @@ public class StoreDao {
                 "and RT.tagIdx = T.tagIdx " +
                 "and R.userIdx = ? " +
                 "and R.categoryIdx = ? " +
+                "and S.status = 'A' " +
                 "group by R.reviewIdx, R.starRate " +
-                "order by R.starRate DESC " +
+                "order by R.starRate DESC, S.storeName " +
                 "limit ?, 12 ";  // 12개씩 보이기
         Object[] params = new Object[]{deliveryService, userIdx, categoryIdx, (pageNo-1)*12};
         return this.jdbcTemplate.query(query,
