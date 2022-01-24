@@ -58,7 +58,7 @@ public class SearchDao {
 
 
     // 입력 받은 문자열이 해시태그인 경우 해당 해시태그에 대한 식당들의 개수 반환
-    public GetSearchByHashtag countByHashTag(int userIdx, String keyword) {
+    public List<GetSearchByHashtag> countByHashTag(int userIdx, String keyword) {
         String query = "select T.tagIdx, T.tagName, count(S.storeIdx) as count " +
                         "from Store S, " +
                         "     Review R, " +
@@ -69,9 +69,10 @@ public class SearchDao {
                         "  and RT.tagIdx = T.tagIdx " +
                         "    and R.userIdx = ?" +
                         "  and S.status = 'A' " +
-                        "  and T.tagName like ? ";
+                        "  and T.tagName like ? " +
+                        "group by T.tagIdx";
         Object[] params = new Object[]{userIdx, "%" + keyword + "%"};
-        return this.jdbcTemplate.queryForObject(query,
+        return this.jdbcTemplate.query(query,
                 (rs, rowNum) -> new GetSearchByHashtag(
                         rs.getInt("tagIdx"),
                         rs.getString("tagName"),

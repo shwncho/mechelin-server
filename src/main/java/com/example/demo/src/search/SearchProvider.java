@@ -33,7 +33,7 @@ public class SearchProvider {
     @Transactional(readOnly = true)
     public GetSearchRes getSearch(int userIdx, String keyword) throws BaseException {
         // 해시태그 검색
-        GetSearchByHashtag getCountStoreByHashtag = null;
+        List<GetSearchByHashtag> getCountStoreByHashtag = null;
 
         // 식당 이름 검색
         List<GetSearchByStoreName> getStoresByStoreName = null;

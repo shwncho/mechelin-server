@@ -11,7 +11,7 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 
 public class GetSearchRes {
-    private GetSearchByHashtag hashtag;
+    private List<GetSearchByHashtag> hashtag;
     private List<GetSearchByStoreName> store;
 }
 
