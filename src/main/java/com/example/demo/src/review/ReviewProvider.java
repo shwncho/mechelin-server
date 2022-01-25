@@ -45,5 +45,4 @@ public class ReviewProvider {
             throw new BaseException(DATABASE_ERROR);
         }
     }
-
 }
