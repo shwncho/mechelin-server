@@ -43,6 +43,7 @@ public class UserController {
         if (postUserReq.getEmail() == null) {
             return new BaseResponse<>(POST_USERS_EMPTY_EMAIL);
         }
+
         if (!isRegexEmail(postUserReq.getEmail())) {
             return new BaseResponse<>(POST_USERS_INVALID_EMAIL);
         }
@@ -71,7 +72,7 @@ public class UserController {
     }
 
     @ResponseBody
-    @PostMapping("/log-in")
+    @PostMapping("/sign-in")
     public BaseResponse<PostLoginRes> logIn(@RequestBody PostLoginReq postLoginReq) {
         if (postLoginReq.getEmail() == null) {
             return new BaseResponse<>(NULL_ERROR);
@@ -87,6 +88,19 @@ public class UserController {
             return new BaseResponse<>(exception.getStatus());
         }
     }
+
+    @ResponseBody
+    @GetMapping("/profile")
+    public BaseResponse<GetProfileRes> getProfile(){
+        try{
+            int userIdx = jwtService.getUserIdx();
+            GetProfileRes getProfileRes = userProvider.getProfile(userIdx);
+            return new BaseResponse<>(getProfileRes);
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
 }
 
 

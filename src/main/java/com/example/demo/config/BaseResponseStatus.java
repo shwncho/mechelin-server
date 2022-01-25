@@ -35,8 +35,10 @@ public enum BaseResponseStatus {
     POST_USERS_INVALID_PASSWORD(false,2020,"비밀번호 형식을 확인해주세요."),
     POST_USERS_INVALID_NICKNAME(false, 2021,"닉네임 형식을 확인해주세요."),
     POST_USERS_INVALID_PHONENUMBER(false,2022,"휴대폰 번호 형식을 확인해주세요."),
+    POST_USERS_INACTIVE_ACCOUNT(false,2023,"탈퇴한 계정입니다. 다시 회원가입을 진행해주세요."),
 
-
+    // search
+    NO_RESULT_FOUND(false, 2030, "검색 결과가 없습니다."),
 
 
     /**

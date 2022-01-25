@@ -2,13 +2,10 @@ package com.example.demo.src.review;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
-import com.example.demo.src.review.model.GetMainScreenReviewRes;
+import com.example.demo.src.review.model.*;
 import com.example.demo.utils.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -30,6 +27,24 @@ public class ReviewController {
             int userIdx = jwtService.getUserIdx();
             List<GetMainScreenReviewRes> getMainScreenReviewResList = reviewProvider.getMainScreenReview(userIdx);
             return new BaseResponse<>(getMainScreenReviewResList);
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
+    @GetMapping("/detail")
+    public BaseResponse<?> getDetailReview(@RequestParam(name = "storeIdx") int storeIdx, @RequestParam(name = "lastIdx", required = false) Integer lastIdx) {
+        try {
+            int userIdx = jwtService.getUserIdx();
+
+            GetStoreInformationRes getStoreInformationRes = reviewProvider.getStoreInformation(userIdx, storeIdx);
+            List<GetReviewRes> getReviewResList = reviewProvider.getReview(userIdx, storeIdx, lastIdx);
+
+            if(lastIdx == null) {
+                return new BaseResponse<>(new GetDetailReviewRes(getStoreInformationRes, getReviewResList));
+            } else {
+                return new BaseResponse<>(getReviewResList);
+            }
         } catch (BaseException exception) {
             return new BaseResponse<>(exception.getStatus());
         }
