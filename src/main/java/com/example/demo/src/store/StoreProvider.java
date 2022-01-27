@@ -106,4 +106,11 @@ public class StoreProvider {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+
+    //식당 존재 확인
+    @Transactional(readOnly = true)
+    public int checkStore(int userIdx, String storeName, String address){
+
+        return storeDao.checkStore(userIdx, storeName, address);
+    }
 }

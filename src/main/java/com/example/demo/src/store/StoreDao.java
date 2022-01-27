@@ -368,4 +368,108 @@ public class StoreDao {
                         rs.getDouble("y")),
                 getStoresParams);
     }
+
+    //Store가 이미 존재하는지 확인
+    public int checkStore(int userIdx, String storeName,String address){
+        String Query="select exists(select storeIdx\n" +
+                "    from Store\n" +
+                "    where userIdx=? AND Store.storeName=? AND Store.address=? AND Store.status='A')";
+        int Params1 = userIdx;
+        String Params2 = storeName;
+        String Params3 = address;
+        return this.jdbcTemplate.queryForObject(Query,int.class,Params1,Params2,Params3);
+    }
+
+
+    //Store, Review테이블에 삽입
+    public int createStore(PostStoreReq postStoreReq){
+        String start="START TRANSACTION";
+        String Query1= "INSERT INTO Store (userIdx,categoryIdx,storeName,address,x,y,tel,deliveryService) VALUES(?,?,?,?,?,?,?,?)";
+        String Query2= "INSERT INTO Review (userIdx,storeIdx,starRate,contents) VALUES(?,last_insert_id(),?,?)";
+        String end="COMMIT";
+
+
+        Object[] Params1 = new Object[]{postStoreReq.getUserIdx(),postStoreReq.getCategoryIdx(),postStoreReq.getStoreName(),postStoreReq.getAddress(),postStoreReq.getX(),postStoreReq.getY(),
+                                        postStoreReq.getTel(),postStoreReq.getDeliveryService()};
+        Object[] Params2 = new Object[]{postStoreReq.getUserIdx(),postStoreReq.getStarRate(),postStoreReq.getContents()};
+
+        this.jdbcTemplate.update(start);
+        this.jdbcTemplate.update(Query1,Params1);
+        this.jdbcTemplate.update(Query2,Params2);
+        this.jdbcTemplate.update(end);
+
+        String reviewIdx= "SELECT last_insert_id()";
+        return this.jdbcTemplate.queryForObject(reviewIdx, int.class);
+
+    }
+
+    //storeIdx를 조회
+    public int searchStoreIdx(int userIdx, String storeName, String address){
+        String Query="select storeIdx\n" +
+                "    from Store\n" +
+                "    where userIdx=? AND Store.storeName=? AND Store.address=? AND Store.status='A'";
+        int Params1 = userIdx;
+        String Params2 = storeName;
+        String Params3 = address;
+        return this.jdbcTemplate.queryForObject(Query,int.class,Params1,Params2,Params3);
+    }
+
+
+    //ReviewImage 삽입
+    public void createImage(String imgURL,int reviewIdx){
+        String Query="INSERT INTO ReviewImage (reviewIdx,imageUrl) VALUES(?,?)";
+        Object[] Params = new Object[]{reviewIdx,imgURL};
+
+        this.jdbcTemplate.update(Query, Params);
+    }
+
+
+    // DB에 tagName 여부 체크이후, tagIdx 반환
+    public int checkTagName(String tagName){
+        String Query1="select exists(select tagIdx from Tag where tagName=?)";
+        String Query2="select tagIdx from Tag where tagName=?";
+        if(this.jdbcTemplate.queryForObject(Query1, int.class,tagName)==1){
+            return this.jdbcTemplate.queryForObject(Query2,int.class,tagName);
+        }
+        else{
+            return 0;
+        }
+    }
+
+
+
+    // tagName이 DB에 없을경우
+    public void createTag(int reviewIdx, String tag){
+        String start="START TRANSACTION";
+        String Query1="INSERT INTO Tag (tagName) VALUES(?)";
+        String Query2="INSERT INTO ReviewTag (reviewIdx,tagIdx) VALUES(?,last_insert_id())";
+        String end="COMMIT";
+
+        Object[] Params1 = new Object[]{tag};
+        Object[] Params2 = new Object[]{reviewIdx};
+
+        this.jdbcTemplate.update(start);
+        this.jdbcTemplate.update(Query1,Params1);
+        this.jdbcTemplate.update(Query2,Params2);
+        this.jdbcTemplate.update(end);
+    }
+
+    // tagName이 DB에 있을경우
+    public void createIsTag(int reviewIdx, int tagIdx){
+        String Query="INSERT INTO ReviewTag (reviewIdx, tagIdx) VALUES(?,?)";
+        Object[] Param = new Object[]{reviewIdx, tagIdx};
+
+        this.jdbcTemplate.update(Query,Param);
+
+
+    }
+
+
+
+
+
+
+
+
+
 }

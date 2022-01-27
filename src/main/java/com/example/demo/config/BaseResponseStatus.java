@@ -41,6 +41,15 @@ public enum BaseResponseStatus {
     NO_RESULT_FOUND(false, 2030, "검색 결과가 없습니다."),
 
 
+    // store
+    POST_STORE_EMPTY_CATEGORY(false,2040,"카테고리를 선택해주세요."),
+    POST_STORE_EMPTY_RESTAURANT(false,2041,"식당을 선택해주세요."),
+    POST_STORE_EXISTS_RESTAURANT(false,2042,"이미 저장된 식당입니다."),
+    POST_STORE_EMPTY_STAR(false,2043,"식당에 점수를 매겨주세요."),
+    POST_STORE_EMPTY_CONTENTS(false,2044,"내용을 입력해주세요."),
+
+
+
     /**
      * 3000 : Response 오류
      */
