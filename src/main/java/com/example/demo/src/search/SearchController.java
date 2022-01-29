@@ -15,7 +15,7 @@ import java.util.List;
 import static com.example.demo.config.BaseResponseStatus.*;
 
 @RestController
-@RequestMapping("/stores")
+@RequestMapping("/search")
 
 public class SearchController {
 
@@ -36,10 +36,14 @@ public class SearchController {
 
     // 유저가 저장한 식당 검색 By 식당 이름, 해시태그
     @ResponseBody
-    @GetMapping("/search")
-    public BaseResponse<GetSearchRes> getSearch(@RequestParam("keyword") String keyword) {
+    @GetMapping("/{userIdx}")
+    public BaseResponse<GetSearchRes> getSearch(@PathVariable("userIdx") int userIdx, @RequestParam("keyword") String keyword) {
         try {
-            int userIdx = jwtService.getUserIdx();
+            int userIdxByJwt = jwtService.getUserIdx();
+
+            if (userIdx != userIdxByJwt) {
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
 
             GetSearchRes getSearchRes = searchProvider.getSearch(userIdx, keyword);
 
@@ -51,10 +55,14 @@ public class SearchController {
 
     // 검색한 해시태그 클릭 시 해당 해시태그를 가진 식당들의 정보 조회
     @ResponseBody
-    @GetMapping("/search/hashtag/{tagIdx}")
-    public BaseResponse<List<GetStoreRes>> getStoresByHashTag(@PathVariable("tagIdx") int tagIdx, @RequestParam(defaultValue = "1") int pageNo) {
+    @GetMapping("/{userIdx}/hashtag")
+    public BaseResponse<List<GetStoreRes>> getStoresByHashTag(@PathVariable("userIdx") int userIdx, @RequestParam("tagIdx") int tagIdx, @RequestParam(defaultValue = "1") int pageNo) {
         try {
-            int userIdx = jwtService.getUserIdx();
+            int userIdxByJwt = jwtService.getUserIdx();
+
+            if (userIdx != userIdxByJwt) {
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
 
             List<GetStoreRes> getStoreRes = searchProvider.getStoresByHashtag(userIdx, tagIdx, pageNo);
 
