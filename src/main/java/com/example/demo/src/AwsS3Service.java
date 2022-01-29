@@ -6,13 +6,13 @@ import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
+import java.time.LocalDate;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,6 +25,9 @@ public class AwsS3Service {
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
+
+    @Value("${cloud.aws.region.key}")
+    private String key;
 
     private final AmazonS3 amazonS3;
 
@@ -51,12 +54,13 @@ public class AwsS3Service {
         return fileNameList;
     }
 
-    public void deleteFile(String fileName) {
+    public void deleteFile(String imageUrl) {
+        String fileName=imageUrl.replace(key,"");
         amazonS3.deleteObject(new DeleteObjectRequest(bucket, fileName));
     }
     // 먼저 파일 업로드 시, 파일명을 난수화하기 위해 random으로 돌립니다.
     private String createFileName(String fileName) {
-        String dirName="simple";
+        String dirName=LocalDate.now().toString();
         return dirName + "/" + UUID.randomUUID() + fileName;
     }
 

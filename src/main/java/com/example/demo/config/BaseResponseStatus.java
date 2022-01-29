@@ -48,6 +48,9 @@ public enum BaseResponseStatus {
     POST_STORE_EMPTY_STAR(false,2043,"식당에 점수를 매겨주세요."),
     POST_STORE_EMPTY_CONTENTS(false,2044,"내용을 입력해주세요."),
 
+    //reviews
+    REVIEWS_EMPTY_REVIEW_ID(false,2050,"리뷰 아이디 값을 확인해주세요."),
+
 
 
     /**

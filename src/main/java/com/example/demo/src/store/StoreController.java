@@ -91,13 +91,15 @@ public class StoreController {
     public BaseResponse<PostStoreRes> createStore(  @RequestPart PostStoreReq postStoreReq,
                                               @RequestPart(required = false) List<MultipartFile> imageFile) {
         try{
+            if(postStoreReq.getUserIdx()==0){
+                return new BaseResponse<>(USERS_EMPTY_USER_ID);
+            }
+
             int userIdxByJwt = jwtService.getUserIdx();
             if(postStoreReq.getUserIdx() != userIdxByJwt){
                 return new BaseResponse<>(INVALID_USER_JWT);
             }
-            if(postStoreReq.getUserIdx()==0){
-                return new BaseResponse<>(USERS_EMPTY_USER_ID);
-            }
+
             if(postStoreReq.getCategoryIdx()==0){
                 return new BaseResponse<>(POST_STORE_EMPTY_CATEGORY);
             }

@@ -37,4 +37,48 @@ public class ReviewDao {
                 );
     }
 
+    public List<Integer> getReviewTagIdx(int reviewIdx){
+        String Query ="select reviewTagIdx\n" +
+                "    from Review\n" +
+                "        inner join ReviewTag\n" +
+                "            on ReviewTag.reviewIdx = Review.reviewIdx\n" +
+                "    where Review.status='A' AND Review.reviewIdx=?";
+        int Param = reviewIdx;
+
+        return this.jdbcTemplate.query(Query,
+                (rs, rowNum) -> (rs.getInt("reviewTagIdx")),Param);
+    }
+
+    public void deleteReviewTag(int reviewTagIdx){
+        String Query="UPDATE ReviewTag set status='D' where reviewTagIdx=?";
+
+        this.jdbcTemplate.update(Query,reviewTagIdx);
+    }
+
+    public List<PatchReviewImageRes> getReviewImageIdx(int reviewIdx){
+        String Query="select reviewImageIdx,imageUrl\n" +
+                "    from Review\n" +
+                "        inner join ReviewImage\n" +
+                "            on ReviewImage.reviewIdx = Review.reviewIdx\n" +
+                "    where Review.status='A' AND Review.reviewIdx=?";
+        int Param = reviewIdx;
+        return this.jdbcTemplate.query(Query,
+                (rs,rowNum) -> new PatchReviewImageRes(
+                        rs.getInt("reviewImageIdx"),
+                        rs.getString("imageUrl")
+                ),Param);
+    }
+
+    public void deleteReviewImage(int reviewImageIdx){
+        String Query="UPDATE ReviewImage set status='D' where reviewImageIdx=?";
+
+        this.jdbcTemplate.update(Query,reviewImageIdx);
+    }
+
+    public void deleteReview(int reviewIdx){
+        String Query="UPDATE Review set status='D' where reviewIdx=?";
+
+        this.jdbcTemplate.update(Query,reviewIdx);
+    }
+
 }
