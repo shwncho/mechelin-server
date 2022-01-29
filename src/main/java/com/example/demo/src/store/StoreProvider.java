@@ -29,7 +29,7 @@ public class StoreProvider {
 
     // 최신순 정렬
     @Transactional(readOnly = true)
-    public List<GetStoreRes> getCategoryByDate(int userIdx, int categoryIdx, String deliveryService, int pageNo) throws BaseException {
+    public List<GetStoreRes> getCategoryByDate(int userIdx, int categoryIdx, String deliveryService, int page, int pageSize) throws BaseException {
         try {
             List<GetStoreRes> getCategoryRes;
 
@@ -37,22 +37,22 @@ public class StoreProvider {
             if (storeDao.checkCategoryIdx(categoryIdx) == 1) {
                 // 전체보기 - 최신순 정렬 + 배달 가능 설정 안 함
                 if (deliveryService.equals("N")) {
-                    getCategoryRes = storeDao.getAllByDate(userIdx, pageNo);
+                    getCategoryRes = storeDao.getAllByDate(userIdx, page, pageSize);
                 }
                 // 전체보기 - 최신순 정렬 + 배달 가능
                 else {
-                    getCategoryRes = storeDao.getAllByDateAndDelivery(userIdx, deliveryService, pageNo);
+                    getCategoryRes = storeDao.getAllByDateAndDelivery(userIdx, deliveryService, page, pageSize);
                 }
             }
             // category => 한식 ..
             else {
                 // 카테고리 - 최신순 정렬 + 배달 가능 설정 안 함
                 if (deliveryService.equals("N")) {
-                    getCategoryRes = storeDao.getCategoryByDate(userIdx, categoryIdx, pageNo);
+                    getCategoryRes = storeDao.getCategoryByDate(userIdx, categoryIdx, page, pageSize);
                 }
                 // 카테고리 - 최신순 정렬 + 배달 가능
                 else {
-                    getCategoryRes = storeDao.getCategoryByDateAndDelivery(userIdx, categoryIdx, deliveryService, pageNo);
+                    getCategoryRes = storeDao.getCategoryByDateAndDelivery(userIdx, categoryIdx, deliveryService, page, pageSize);
                 }
             }
             return getCategoryRes;
@@ -64,7 +64,7 @@ public class StoreProvider {
 
     // 별점순 정렬
     @Transactional(readOnly = true)
-    public List<GetStoreRes> getCategoryByStarRate(int userIdx, int categoryIdx, String deliveryService, int pageNo) throws BaseException {
+    public List<GetStoreRes> getCategoryByStarRate(int userIdx, int categoryIdx, String deliveryService, int page, int pageSize) throws BaseException {
         try {
             List<GetStoreRes> getCategoryRes;
 
@@ -72,22 +72,22 @@ public class StoreProvider {
             if (storeDao.checkCategoryIdx(categoryIdx) == 1) {
                 // 전체보기 - 별점순 정렬 + 배달 가능 설정 안 함
                 if (deliveryService.equals("N")) {
-                    getCategoryRes = storeDao.getAllByStarRate(userIdx, pageNo);
+                    getCategoryRes = storeDao.getAllByStarRate(userIdx, page, pageSize);
                 }
                 // 전체보기 - 별점순 정렬 + 배달 가능
                 else {
-                    getCategoryRes = storeDao.getAllByStarRateAndDelivery(userIdx, deliveryService, pageNo);
+                    getCategoryRes = storeDao.getAllByStarRateAndDelivery(userIdx, deliveryService, page, pageSize);
                 }
             }
             // category => 한식 ..
             else {
                 // 카테고리 - 최신순 정렬 + 배달 가능 설정 안 함
                 if (deliveryService.equals("N")) {
-                    getCategoryRes = storeDao.getCategoryByStarRate(userIdx, categoryIdx, pageNo);
+                    getCategoryRes = storeDao.getCategoryByStarRate(userIdx, categoryIdx, page, pageSize);
                 }
                 // 카테고리 - 최신순 정렬 + 배달 가능
                 else {
-                    getCategoryRes = storeDao.getCategoryByStarRateAndDelivery(userIdx, categoryIdx, deliveryService, pageNo);
+                    getCategoryRes = storeDao.getCategoryByStarRateAndDelivery(userIdx, categoryIdx, deliveryService, page, pageSize);
                 }
             }
             return getCategoryRes;
@@ -95,6 +95,7 @@ public class StoreProvider {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+
 
     //전체 식당 조회
     @Transactional(readOnly = true)
@@ -106,4 +107,13 @@ public class StoreProvider {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+
+
+    //식당 존재 확인
+    @Transactional(readOnly = true)
+    public int checkStore(int userIdx, String storeName, String address){
+
+        return storeDao.checkStore(userIdx, storeName, address);
+    }
 }
+

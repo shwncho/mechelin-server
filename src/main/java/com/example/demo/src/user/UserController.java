@@ -38,7 +38,7 @@ public class UserController {
 
 
     @ResponseBody
-    @PostMapping("/sign-up")
+    @PostMapping("")
     public BaseResponse<PostUserRes> createUser(@RequestBody PostUserReq postUserReq) {
         if (postUserReq.getEmail() == null) {
             return new BaseResponse<>(POST_USERS_EMPTY_EMAIL);
@@ -90,10 +90,13 @@ public class UserController {
     }
 
     @ResponseBody
-    @GetMapping("/profile")
-    public BaseResponse<GetProfileRes> getProfile(){
+    @GetMapping("")
+    public BaseResponse<GetProfileRes> getProfile(@PathVariable int userIdx){
         try{
-            int userIdx = jwtService.getUserIdx();
+            int userIdxByJwt = jwtService.getUserIdx();
+            if(userIdx!=userIdxByJwt){
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
             GetProfileRes getProfileRes = userProvider.getProfile(userIdx);
             return new BaseResponse<>(getProfileRes);
         } catch(BaseException exception){

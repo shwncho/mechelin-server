@@ -28,6 +28,7 @@ repositories {
 //스프링 부트 디펜던시 추가 하는곳
 dependencies {
     implementation 'org.jetbrains:annotations:19.0.0'
+    implementation 'io.awspring.cloud:spring-cloud-starter-aws:2.3.1'
 
 
     // Spring Boot Starter

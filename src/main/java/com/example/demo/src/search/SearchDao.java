@@ -81,7 +81,7 @@ public class SearchDao {
     }
 
     // 검색한 Tag를 클릭하면 해당 해시태그에 대한 식당 정보 조회
-    public List<GetStoreRes> getStoresByHashtag(int userIdx, int tagIdx, int pageNo) {
+    public List<GetStoreRes> getStoresByHashtag(int userIdx, int tagIdx, int page, int pageSize) {
         String query = "select S.storeIdx, RI.imageUrl as imageUrl, S.storeName, R.starRate, T.tagName as tag, substring_index(S.address, ' ', 2) as address " +
                         "from ( " +
                         "        select min(reviewIdx) as reviewIdx, userIdx, storeIdx, ROUND(AVG(starRate), 1) as starRate , createdAt " +
@@ -104,8 +104,8 @@ public class SearchDao {
                         "    and S.status = 'A' " +
                         "    and T.tagIdx = ? " +
                         "order by R.createdAt DESC " +
-                        "limit ?, 12";  // 식당 정보 12개씩 보이기
-        Object[] params = new Object[]{userIdx, tagIdx, (pageNo-1)*12};
+                        "limit ?, ?";  // 식당 정보 12개씩 보이기
+        Object[] params = new Object[]{userIdx, tagIdx, (page-1)*pageSize, pageSize};
         return this.jdbcTemplate.query(query,
                 (rs, rowNum) -> new GetStoreRes(
                         rs.getInt("storeIdx"),

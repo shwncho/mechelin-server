@@ -44,14 +44,13 @@ public class UserProvider {
         }
 
         if (postLoginReq.getPassword().equals(password)) {
-            if(checkStatus(postLoginReq.getEmail())== "A") {
-                int userIdx = userDao.getPwd(postLoginReq).getUserIdx();
-                String jwt = jwtService.createJwt(userIdx);
-                return new PostLoginRes(userIdx, jwt);
-            }
-            else{
+            if(checkStatus(postLoginReq.getEmail())== "D") {
                 throw new BaseException(POST_USERS_INACTIVE_ACCOUNT);
             }
+
+            int userIdx = userDao.getPwd(postLoginReq).getUserIdx();
+            String jwt = jwtService.createJwt(userIdx);
+            return new PostLoginRes(userIdx, jwt);
 
         } else {
             throw new BaseException(FAILED_TO_LOGIN);

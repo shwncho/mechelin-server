@@ -56,7 +56,7 @@ public class SearchController {
     // 검색한 해시태그 클릭 시 해당 해시태그를 가진 식당들의 정보 조회
     @ResponseBody
     @GetMapping("/{userIdx}/hashtag")
-    public BaseResponse<List<GetStoreRes>> getStoresByHashTag(@PathVariable("userIdx") int userIdx, @RequestParam("tagIdx") int tagIdx, @RequestParam(defaultValue = "1") int pageNo) {
+    public BaseResponse<List<GetStoreRes>> getStoresByHashTag(@PathVariable("userIdx") int userIdx, @RequestParam("tagIdx") int tagIdx, @RequestParam(defaultValue = "1") int page, @RequestParam int pageSize) {
         try {
             int userIdxByJwt = jwtService.getUserIdx();
 
@@ -64,7 +64,7 @@ public class SearchController {
                 return new BaseResponse<>(INVALID_USER_JWT);
             }
 
-            List<GetStoreRes> getStoreRes = searchProvider.getStoresByHashtag(userIdx, tagIdx, pageNo);
+            List<GetStoreRes> getStoreRes = searchProvider.getStoresByHashtag(userIdx, tagIdx, page, pageSize);
 
             return new BaseResponse<>(getStoreRes);
         } catch (BaseException exception) {
