@@ -29,18 +29,18 @@ public class ReviewProvider {
         }
     }
     @Transactional(readOnly = true)
-    public List<Integer> getReviewTagIdx(int reviewIdx) throws BaseException{
+    public List<Integer> getReviewTagIdx(int userIdx,int reviewIdx) throws BaseException{
         try{
-            return reviewDao.getReviewTagIdx(reviewIdx);
+            return reviewDao.getReviewTagIdx(userIdx,reviewIdx);
         } catch (Exception exception){
             throw new BaseException(DATABASE_ERROR);
         }
     }
 
     @Transactional(readOnly = true)
-    public List<PatchReviewImageRes> getReviewImageIdx(int reviewIdx) throws BaseException{
+    public List<Integer> getReviewImageIdx(int userIdx, int reviewIdx) throws BaseException{
         try{
-            return reviewDao.getReviewImageIdx(reviewIdx);
+            return reviewDao.getReviewImageIdx(userIdx, reviewIdx);
         } catch (Exception exception){
             throw new BaseException(DATABASE_ERROR);
         }

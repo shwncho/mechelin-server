@@ -37,16 +37,17 @@ public class ReviewDao {
                 );
     }
 
-    public List<Integer> getReviewTagIdx(int reviewIdx){
+    public List<Integer> getReviewTagIdx(int userIdx, int reviewIdx){
         String Query ="select reviewTagIdx\n" +
                 "    from Review\n" +
                 "        inner join ReviewTag\n" +
                 "            on ReviewTag.reviewIdx = Review.reviewIdx\n" +
-                "    where Review.status='A' AND Review.reviewIdx=?";
-        int Param = reviewIdx;
+                "    where Review.userIdx=? AND Review.status='A' AND Review.reviewIdx=?";
+        int Param1 = userIdx;
+        int Param2 = reviewIdx;
 
         return this.jdbcTemplate.query(Query,
-                (rs, rowNum) -> (rs.getInt("reviewTagIdx")),Param);
+                (rs, rowNum) -> (rs.getInt("reviewTagIdx")),Param1,Param2);
     }
 
     public void deleteReviewTag(int reviewTagIdx){
@@ -55,18 +56,16 @@ public class ReviewDao {
         this.jdbcTemplate.update(Query,reviewTagIdx);
     }
 
-    public List<PatchReviewImageRes> getReviewImageIdx(int reviewIdx){
-        String Query="select reviewImageIdx,imageUrl\n" +
+    public List<Integer> getReviewImageIdx(int userIdx,int reviewIdx){
+        String Query="select reviewImageIdx\n" +
                 "    from Review\n" +
                 "        inner join ReviewImage\n" +
                 "            on ReviewImage.reviewIdx = Review.reviewIdx\n" +
-                "    where Review.status='A' AND Review.reviewIdx=?";
-        int Param = reviewIdx;
+                "    where Review.userIdx=? AND Review.status='A' AND Review.reviewIdx=?";
+        int Param1 = userIdx;
+        int Param2 = reviewIdx;
         return this.jdbcTemplate.query(Query,
-                (rs,rowNum) -> new PatchReviewImageRes(
-                        rs.getInt("reviewImageIdx"),
-                        rs.getString("imageUrl")
-                ),Param);
+                (rs,rowNum) -> (rs.getInt("reviewImageIdx")),Param1,Param2);
     }
 
     public void deleteReviewImage(int reviewImageIdx){

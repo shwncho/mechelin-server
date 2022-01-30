@@ -128,6 +128,30 @@ public class StoreController {
         }
     }
 
+    @ResponseBody
+    @PatchMapping("/{userIdx}/{storeIdx}/status")
+    public BaseResponse<String> deleteStore(@PathVariable int userIdx, @PathVariable int storeIdx){
+        try{
+            if(userIdx==0){
+                return new BaseResponse<>(USERS_EMPTY_USER_ID);
+            }
+
+            int userIdxByJwt = jwtService.getUserIdx();
+            if(userIdx!=userIdxByJwt){
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+
+            if(storeIdx==0){
+                return new BaseResponse<>(STORES_EMPTY_STORE_ID);
+            }
+
+            storeService.deleteStore(userIdx, storeIdx);
+            String result="식당이 삭제되었습니다.";
+            return new BaseResponse<>(result);
+        } catch (BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
 
 
 

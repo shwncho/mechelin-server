@@ -36,17 +36,17 @@ public class ReviewService {
 
     //리뷰 삭제
     @Transactional(rollbackFor = BaseException.class)
-    public void deleteReview(int reviewIdx) throws BaseException{
+    public void deleteReview(int userIdx, int reviewIdx) throws BaseException{
         try{
-            List<Integer> reviewTagIdx = reviewProvider.getReviewTagIdx(reviewIdx);
+            List<Integer> reviewTagIdx = reviewProvider.getReviewTagIdx(userIdx,reviewIdx);
             for(int idx : reviewTagIdx){
                 reviewDao.deleteReviewTag(idx);
             }
 
-            List<PatchReviewImageRes> patchReviewImageRes = reviewProvider.getReviewImageIdx(reviewIdx);
-            for(PatchReviewImageRes t : patchReviewImageRes){
-                int idx = t.getReviewImageIdx();
-                reviewDao.deleteReviewImage(idx);
+            List<Integer> reviewImageIdx = reviewProvider.getReviewImageIdx(userIdx, reviewIdx);
+            for(int t : reviewImageIdx){
+
+                reviewDao.deleteReviewImage(t);
             }
 //            for(PatchReviewImageRes t : patchReviewImageRes){
 //                String imageUrl = t.getImageUrl();

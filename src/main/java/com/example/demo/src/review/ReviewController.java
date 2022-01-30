@@ -59,7 +59,7 @@ public class ReviewController {
             if (userIdx != userIdxByJwt) {
                 return new BaseResponse<>(INVALID_USER_JWT);
             }
-            reviewService.deleteReview(reviewIdx);
+            reviewService.deleteReview(userIdx,reviewIdx);
             String result = "리뷰가 삭제되었습니다.";
 
             return new BaseResponse<>(result);
