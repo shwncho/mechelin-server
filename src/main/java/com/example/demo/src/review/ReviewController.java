@@ -5,14 +5,11 @@ import com.example.demo.config.BaseResponse;
 import com.example.demo.src.review.model.*;
 import com.example.demo.utils.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static com.example.demo.config.BaseResponseStatus.INVALID_USER_JWT;
+import static com.example.demo.config.BaseResponseStatus.*;
 
 @RestController
 @RequestMapping("reviews")
@@ -36,4 +33,5 @@ public class ReviewController {
             return new BaseResponse<>(exception.getStatus());
         }
     }
+
 }

@@ -41,7 +41,6 @@ public enum BaseResponseStatus {
     NO_RESULT_FOUND(false, 2030, "검색 결과가 없습니다."),
 
 
-
     // store
     POST_STORE_EMPTY_CATEGORY(false,2040,"카테고리를 선택해주세요."),
     POST_STORE_EMPTY_RESTAURANT(false,2041,"식당을 선택해주세요."),
@@ -71,6 +70,7 @@ public enum BaseResponseStatus {
 
     PASSWORD_ENCRYPTION_ERROR(false, 4011, "비밀번호 암호화에 실패하였습니다."),
     PASSWORD_DECRYPTION_ERROR(false, 4012, "비밀번호 복호화에 실패하였습니다.");
+
 
 
     // 5000 : 필요시 만들어서 쓰세요
