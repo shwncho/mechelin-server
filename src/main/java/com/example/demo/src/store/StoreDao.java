@@ -453,5 +453,33 @@ public class StoreDao {
 
     }
 
+<<<<<<< HEAD
+=======
+    public List<Integer> getReviewIdx(int userIdx, int storeIdx){
+        String Query="select reviewIdx\n" +
+                "    from Review\n" +
+                "        inner join Store\n" +
+                "            on Store.storeIdx = Review.storeIdx\n" +
+                "    where Store.userIdx=? AND Review.status='A' AND Store.storeIdx=?";
+
+        return this.jdbcTemplate.query(Query,
+                (rs,rowNum) -> (rs.getInt("reviewIdx")),userIdx,storeIdx);
+
+    }
+
+    public void deleteStore(int storeIdx){
+        String Query="UPDATE Store set status='D' where storeIdx=?";
+
+        this.jdbcTemplate.update(Query,storeIdx);
+    }
+
+
+
+
+
+
+
+
+>>>>>>> upstream/develop
 }
 

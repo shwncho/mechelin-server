@@ -1,30 +1,23 @@
 package com.example.demo.src.store;
 
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.DeleteObjectRequest;
-import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.PutObjectRequest;
+
 import com.example.demo.config.BaseException;
+import com.example.demo.src.review.ReviewDao;
+import com.example.demo.src.review.ReviewProvider;
+import com.example.demo.src.review.model.PatchReviewImageRes;
 import com.example.demo.src.store.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.server.ResponseStatusException;
 
-import java.io.IOException;
-import java.io.InputStream;
+
+
 import java.util.*;
 
-import java.util.UUID;
 
 import static com.example.demo.config.BaseResponseStatus.DATABASE_ERROR;
-import static com.example.demo.config.BaseResponseStatus.POST_STORE_EXISTS_RESTAURANT;
 
 @Service
 
@@ -34,11 +27,15 @@ public class StoreService {
 
     private final StoreDao storeDao;
     private final StoreProvider storeProvider;
+    private final ReviewProvider reviewProvider;
+    private final ReviewDao reviewDao;
 
     @Autowired
-    public StoreService(StoreDao storeDao, StoreProvider storeProvider) {
+    public StoreService(StoreDao storeDao, StoreProvider storeProvider, ReviewProvider reviewProvider, ReviewDao reviewDao) {
         this.storeDao = storeDao;
         this.storeProvider = storeProvider;
+        this.reviewProvider = reviewProvider;
+        this.reviewDao = reviewDao;
     }
     @Transactional(rollbackFor = BaseException.class)
     public PostStoreRes createStore(PostStoreReq postStoreReq, List<String> fileNameList) throws BaseException{
@@ -71,7 +68,32 @@ public class StoreService {
         }
     }
 
-    // ******************************************************************************
+    @Transactional(rollbackFor = BaseException.class)
+    public void deleteStore(int userIdx, int storeIdx) throws BaseException{
+        try{
+             List<Integer> reviewIdx=storeDao.getReviewIdx(userIdx,storeIdx);
+
+             for(int rIdx : reviewIdx){
+                 List<Integer> reviewTagIdx = reviewProvider.getReviewTagIdx(userIdx,rIdx);
+                 for(int idx : reviewTagIdx){
+                     reviewDao.deleteReviewTag(idx);
+                 }
+
+                 List<Integer> imageIdx = reviewProvider.getReviewImageIdx(userIdx, rIdx);
+                 for(int t : imageIdx){
+                     reviewDao.deleteReviewImage(t);
+                 }
+
+                 reviewDao.deleteReview(rIdx);
+
+             }
+
+            storeDao.deleteStore(storeIdx);
+
+        } catch(Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
 
 
 }
