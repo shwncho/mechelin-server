@@ -453,8 +453,7 @@ public class StoreDao {
 
     }
 
-<<<<<<< HEAD
-=======
+
     public List<Integer> getReviewIdx(int userIdx, int storeIdx){
         String Query="select reviewIdx\n" +
                 "    from Review\n" +
@@ -473,13 +472,5 @@ public class StoreDao {
         this.jdbcTemplate.update(Query,storeIdx);
     }
 
-
-
-
-
-
-
-
->>>>>>> upstream/develop
 }
 
