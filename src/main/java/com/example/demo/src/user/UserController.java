@@ -89,7 +89,7 @@ public class UserController {
     }
 
     @ResponseBody
-    @GetMapping("")
+    @GetMapping("/{userIdx}")
     public BaseResponse<GetProfileRes> getProfile(@PathVariable int userIdx){
         try{
             int userIdxByJwt = jwtService.getUserIdx();
