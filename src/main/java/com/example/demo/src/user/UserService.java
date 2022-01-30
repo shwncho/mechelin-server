@@ -9,6 +9,7 @@ import com.example.demo.utils.JwtService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.transaction.annotation.Transactional;
@@ -58,6 +59,31 @@ public class UserService {
 
             String jwt = jwtService.createJwt(userIdx);
             return new PostUserRes(userIdx,jwt);
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    // 회원탈퇴
+    @Transactional
+    public PatchUserStatusRes deleteAccount(int userIdx, String password) throws BaseException{
+        AES128 aes128 = new AES128(Secret.USER_INFO_PASSWORD_KEY);
+        String storedPassword = userDao.getPassword(userIdx);
+        String decryptedPassword;
+        try {
+            decryptedPassword = aes128.decrypt(storedPassword);
+        } catch (Exception exception) {
+            throw new BaseException(PASSWORD_DECRYPTION_ERROR);
+        }
+
+        try {
+            if (password.equals(decryptedPassword)) {
+                return new PatchUserStatusRes(userDao.deleteAccount(userIdx));
+            } else {
+                throw new BaseException(PATCH_USERS_STATUS_INVALID_PASSWORD);
+            }
+        } catch (BaseException baseException) {
+            throw new BaseException(baseException.getStatus());
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }
