@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.example.demo.src.store.StoreDao;
 
 import java.util.List;
 
@@ -21,16 +22,16 @@ public class ReviewService {
 
     private final ReviewDao reviewDao;
     private final ReviewProvider reviewProvider;
-    private final JwtService jwtService;
     private final AwsS3Service awsS3Service;
+    private final StoreDao storeDao;
 
 
     @Autowired
-    public ReviewService(ReviewDao reviewDao, ReviewProvider reviewProvider, JwtService jwtService, AwsS3Service awsS3Service){
+    public ReviewService(ReviewDao reviewDao, ReviewProvider reviewProvider, AwsS3Service awsS3Service, StoreDao storeDao){
         this.reviewDao = reviewDao;
         this.reviewProvider = reviewProvider;
-        this.jwtService = jwtService;
         this.awsS3Service = awsS3Service;
+        this.storeDao = storeDao;
     }
 
     //리뷰 삭제
@@ -59,4 +60,33 @@ public class ReviewService {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+    @Transactional(rollbackFor = BaseException.class)
+    public int createReview(PostReviewReq postReviewReq, List<String> fileNameList) throws BaseException{
+        try{
+            int reviewIdx = reviewDao.createReview(postReviewReq);
+
+            if(!(fileNameList.isEmpty())) {
+                for (String imgURL : fileNameList) {
+                    storeDao.createImage(imgURL, reviewIdx);
+                }
+            }
+            if(!(postReviewReq.getTagName().isEmpty())) {
+                for (String tag : postReviewReq.getTagName()) {
+                    int tagIdx = storeDao.checkTagName(tag);
+
+                    if (tagIdx == 0) {
+                        storeDao.createTag(reviewIdx, tag);
+                    } else {
+                        storeDao.createIsTag(reviewIdx, tagIdx);
+                    }
+                }
+            }
+
+            return reviewIdx;
+        } catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+
 }

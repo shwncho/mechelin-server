@@ -81,4 +81,13 @@ public class ReviewDao {
         this.jdbcTemplate.update(Query,reviewIdx);
     }
 
+    public int createReview(PostReviewReq postReviewReq){
+        String Query="INSERT INTO Review (userIdx,storeIdx,starRate,contents) VALUES(?,?,?,?)";
+        Object[] Param = new Object[]{postReviewReq.getUserIdx(),postReviewReq.getStoreIdx(),postReviewReq.getStarRate(),postReviewReq.getContents()};
+
+        this.jdbcTemplate.update(Query,Param);
+        String reviewIdx= "SELECT last_insert_id()";
+        return this.jdbcTemplate.queryForObject(reviewIdx, int.class);
+    }
+
 }
