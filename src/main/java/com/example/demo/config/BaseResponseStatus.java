@@ -40,6 +40,18 @@ public enum BaseResponseStatus {
     // search
     NO_RESULT_FOUND(false, 2030, "검색 결과가 없습니다."),
 
+
+    // store
+    POST_STORE_EMPTY_CATEGORY(false,2040,"카테고리를 선택해주세요."),
+    POST_STORE_EMPTY_RESTAURANT(false,2041,"식당을 선택해주세요."),
+    POST_STORE_EXISTS_RESTAURANT(false,2042,"이미 저장된 식당입니다."),
+    POST_STORE_EMPTY_STAR(false,2043,"식당에 점수를 매겨주세요."),
+    POST_STORE_EMPTY_CONTENTS(false,2044,"내용을 입력해주세요."),
+    STORES_EMPTY_STORE_ID(false,2045,"식당 아이디 값을 확인해주세요."),
+    //reviews
+    REVIEWS_EMPTY_REVIEW_ID(false,2050,"리뷰 아이디 값을 확인해주세요."),
+
+
     // [PATCH] / users
     PATCH_USERS_STATUS_INVALID_PASSWORD(false,2040, "비밀번호가 틀렸습니다."),
 

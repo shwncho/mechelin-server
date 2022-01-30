@@ -94,6 +94,7 @@ public class UserDao {
                         rs.getInt("reviewCnt")),
                 getProfileParams);
     }
+
     public String getPassword(int userIdx) {
         String getPasswordQuery = "SELECT password FROM User WHERE userIdx = ?";
         return this.jdbcTemplate.queryForObject(getPasswordQuery, String.class , userIdx);
