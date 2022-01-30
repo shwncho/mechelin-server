@@ -88,5 +88,17 @@ public class ReviewService {
         }
     }
 
+    // 리뷰 수정
+    @Transactional
+    public void editReview(PatchReviewReq patchReviewReq, int reviewIdx) throws BaseException{
+        try {
+            int result = reviewDao.editReview(patchReviewReq, reviewIdx);
+            if (result == 0) {
+                throw new BaseException(EDIT_FAIL_REVIEW);
+            }
+        } catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
 
 }

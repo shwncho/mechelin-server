@@ -51,6 +51,9 @@ public enum BaseResponseStatus {
     //reviews
     REVIEWS_EMPTY_REVIEW_ID(false,2050,"리뷰 아이디 값을 확인해주세요."),
 
+    // reviews
+    PATCH_REVIEW_EMPTY_STARRATE(false, 2050, "별점을 설정해주세요."),
+    PATCH_REVIEW_EMPTY_CONTENTS(false, 2051, "내용을 입력해주세요."),
 
 
     /**
@@ -72,7 +75,11 @@ public enum BaseResponseStatus {
 
 
     PASSWORD_ENCRYPTION_ERROR(false, 4011, "비밀번호 암호화에 실패하였습니다."),
-    PASSWORD_DECRYPTION_ERROR(false, 4012, "비밀번호 복호화에 실패하였습니다.");
+    PASSWORD_DECRYPTION_ERROR(false, 4012, "비밀번호 복호화에 실패하였습니다."),
+
+    // review
+    EDIT_FAIL_REVIEW(false, 4021, "리뷰 수정에 실패하였습니다.");
+
 
 
     // 5000 : 필요시 만들어서 쓰세요
