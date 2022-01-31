@@ -15,7 +15,7 @@ import static com.example.demo.config.BaseResponseStatus.*;
 import static com.example.demo.utils.ValidationRegex.*;
 
 @RestController
-@RequestMapping("users")
+@RequestMapping("/users")
 
 public class UserController {
 

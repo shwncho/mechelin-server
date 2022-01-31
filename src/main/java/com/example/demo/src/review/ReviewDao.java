@@ -178,4 +178,13 @@ public class ReviewDao {
         String reviewIdx= "SELECT last_insert_id()";
         return this.jdbcTemplate.queryForObject(reviewIdx, int.class);
     }
+
+
+    // 리뷰 수정
+    public int editReview(PatchReviewReq patchReviewReq, int reviewIdx) {
+        String query = "update Review set starRate = ?, contents = ? where reviewIdx = ?";
+        Object[] params = new Object[]{patchReviewReq.getStarRate(), patchReviewReq.getContents(), reviewIdx};
+        return this.jdbcTemplate.update(query, params);
+    }
+
 }

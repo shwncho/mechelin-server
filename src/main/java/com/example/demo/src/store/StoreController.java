@@ -43,21 +43,25 @@ public class StoreController {
      */
 
     @ResponseBody
-    @GetMapping("/category")
+    @GetMapping("/{userIdx}/{categoryIdx}")
 
-    public BaseResponse<List<GetStoreRes>> getCategory (@RequestParam("categoryIdx") int categoryIdx, @RequestParam(value="starRating", required = false, defaultValue = "N") String starRating, @RequestParam(value = "deliveryService", required = false, defaultValue = "N") String deliveryService, @RequestParam(defaultValue = "1") int pageNo) {
+    public BaseResponse<List<GetStoreRes>> getCategory (@PathVariable("userIdx") int userIdx, @PathVariable("categoryIdx") int categoryIdx, @RequestParam(value="starRating", required = false, defaultValue = "N") String starRating, @RequestParam(value = "deliveryService", required = false, defaultValue = "N") String deliveryService, @RequestParam(defaultValue = "1") int page, @RequestParam int pageSize) {
         try {
-            int userIdx = jwtService.getUserIdx();
+            int userIdxByJwt = jwtService.getUserIdx();
+
+            if (userIdx != userIdxByJwt) {
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
 
             List<GetStoreRes> getStoreRes;
 
             // starRating 값이 'N' 이면, 최신순으로 정렬한다.
             if (starRating.equals("N")) {
-                getStoreRes = storeProvider.getCategoryByDate(userIdx, categoryIdx, deliveryService, pageNo);
+                getStoreRes = storeProvider.getCategoryByDate(userIdx, categoryIdx, deliveryService, page, pageSize);
             }
             // starRating 값이 'Y' 이면, 별점순으로 정렬한다.
             else {
-                getStoreRes = storeProvider.getCategoryByStarRate(userIdx, categoryIdx, deliveryService, pageNo);
+                getStoreRes = storeProvider.getCategoryByStarRate(userIdx, categoryIdx, deliveryService, page, pageSize);
             }
 
             return new BaseResponse<>(getStoreRes);
