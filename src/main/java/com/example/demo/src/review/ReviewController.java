@@ -18,7 +18,7 @@ import static com.example.demo.config.BaseResponseStatus.*;
 
 
 @RestController
-@RequestMapping("reviews")
+@RequestMapping("/reviews")
 public class ReviewController {
     private final ReviewProvider reviewProvider;
     private final ReviewService reviewService;
