@@ -15,7 +15,7 @@ import static com.example.demo.config.BaseResponseStatus.*;
 import static com.example.demo.utils.ValidationRegex.*;
 
 @RestController
-@RequestMapping("users")
+@RequestMapping("/users")
 
 public class UserController {
 
@@ -89,7 +89,7 @@ public class UserController {
     }
 
     @ResponseBody
-    @GetMapping("")
+    @GetMapping("/{userIdx}")
     public BaseResponse<GetProfileRes> getProfile(@PathVariable int userIdx){
         try{
             int userIdxByJwt = jwtService.getUserIdx();
@@ -100,6 +100,19 @@ public class UserController {
             return new BaseResponse<>(getProfileRes);
         } catch(BaseException exception){
             return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    @PatchMapping("/{userIdx}/status")
+    public BaseResponse<PatchUserStatusRes> deleteAccount(@RequestBody PatchUserStatusReq patchUserStatusReq, @PathVariable("userIdx") int userIdx) {
+        try {
+            if (userIdx != jwtService.getUserIdx()) {
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+            PatchUserStatusRes patchUserStatusRes = userService.deleteAccount(userIdx, patchUserStatusReq.getPassword());
+            return new BaseResponse<>(patchUserStatusRes);
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
         }
     }
 

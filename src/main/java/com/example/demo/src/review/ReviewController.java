@@ -2,11 +2,15 @@ package com.example.demo.src.review;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
+
 import com.example.demo.src.AwsS3Service;
 import com.example.demo.src.review.model.*;
 import com.example.demo.utils.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import static com.example.demo.config.BaseResponseStatus.*;
+
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -18,7 +22,7 @@ import static com.example.demo.config.BaseResponseStatus.*;
 
 
 @RestController
-@RequestMapping("reviews")
+@RequestMapping("/reviews")
 public class ReviewController {
     private final ReviewProvider reviewProvider;
     private final ReviewService reviewService;
@@ -34,10 +38,12 @@ public class ReviewController {
         this.awsS3Service = awsS3Service;
     }
 
-    @GetMapping("/main")
-    public BaseResponse<List<GetMainScreenReviewRes>> getMainScreenReview() {
+    @GetMapping("/{userIdx}")
+    public BaseResponse<List<GetMainScreenReviewRes>> getMainScreenReview(@PathVariable("userIdx") int userIdx) {
         try {
-            int userIdx = jwtService.getUserIdx();
+            if (userIdx != jwtService.getUserIdx()) {
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
             List<GetMainScreenReviewRes> getMainScreenReviewResList = reviewProvider.getMainScreenReview(userIdx);
             return new BaseResponse<>(getMainScreenReviewResList);
         } catch (BaseException exception) {
@@ -46,6 +52,25 @@ public class ReviewController {
     }
 
 
+
+
+    @GetMapping("/{userIdx}/{storeIdx}")
+    public BaseResponse<?> getDetailReview(@PathVariable("userIdx") int userIdx, @PathVariable("storeIdx") int storeIdx, @RequestParam(name = "page") int page, @RequestParam(name = "pagesize") int pageSize) {
+        try {
+            System.out.println(page);
+            if (userIdx != jwtService.getUserIdx()) {
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+            GetStoreInformationRes getStoreInformationRes = reviewProvider.getStoreInformation(userIdx, storeIdx);
+            List<GetReviewRes> getReviewResList = reviewProvider.getReview(userIdx, storeIdx, page, pageSize);
+
+            return new BaseResponse<>(new GetDetailReviewRes(getStoreInformationRes, getReviewResList));
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
+    
     @ResponseBody
     @PatchMapping("/{userIdx}/{reviewIdx}/status")
     public BaseResponse<String> deleteReview(@PathVariable int userIdx, @PathVariable int reviewIdx){
