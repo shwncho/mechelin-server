@@ -95,5 +95,16 @@ public class UserDao {
                 getProfileParams);
     }
 
+    public String getPassword(int userIdx) {
+        String getPasswordQuery = "SELECT password FROM User WHERE userIdx = ?";
+        return this.jdbcTemplate.queryForObject(getPasswordQuery, String.class , userIdx);
+    }
+
+    // 회원탈퇴
+    public int deleteAccount (int userIdx) {
+        String deleteAccountQuery = "UPDATE User SET status = 'D' WHERE userIdx = ?";
+        this.jdbcTemplate.update(deleteAccountQuery, userIdx);
+        return userIdx;
+    }
 
 }

@@ -103,6 +103,19 @@ public class UserController {
         }
     }
 
+    @PatchMapping("/{userIdx}/status")
+    public BaseResponse<PatchUserStatusRes> deleteAccount(@RequestBody PatchUserStatusReq patchUserStatusReq, @PathVariable("userIdx") int userIdx) {
+        try {
+            if (userIdx != jwtService.getUserIdx()) {
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+            PatchUserStatusRes patchUserStatusRes = userService.deleteAccount(userIdx, patchUserStatusReq.getPassword());
+            return new BaseResponse<>(patchUserStatusRes);
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
 }
 
 

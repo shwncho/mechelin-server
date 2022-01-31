@@ -55,6 +55,9 @@ public enum BaseResponseStatus {
     PATCH_REVIEW_EMPTY_STARRATE(false, 2050, "별점을 설정해주세요."),
     PATCH_REVIEW_EMPTY_CONTENTS(false, 2051, "내용을 입력해주세요."),
 
+    // [PATCH] / users
+    PATCH_USERS_STATUS_INVALID_PASSWORD(false,2040, "비밀번호가 틀렸습니다."),
+
 
     /**
      * 3000 : Response 오류
