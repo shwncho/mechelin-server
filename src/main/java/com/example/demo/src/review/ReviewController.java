@@ -70,7 +70,7 @@ public class ReviewController {
         }
     }
 
-    
+
     @ResponseBody
     @PatchMapping("/{userIdx}/{reviewIdx}/status")
     public BaseResponse<String> deleteReview(@PathVariable int userIdx, @PathVariable int reviewIdx){
