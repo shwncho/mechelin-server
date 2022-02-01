@@ -3,6 +3,7 @@ package com.example.demo;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.cache.annotation.EnableCaching;
 
 @SpringBootApplication  // SpringBoot의 가장 기본적인 설정 선언.
 // @Controller, @Service, @Repository 등의 Annotation 스캔 및 Bean 등록

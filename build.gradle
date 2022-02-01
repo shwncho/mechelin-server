@@ -8,8 +8,8 @@ group = 'com.example'
 version = '0.0.1-SNAPSHOT'
 
 //자바 컴파일 메소드 버전
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+sourceCompatibility = 11
+targetCompatibility = 11
 
 //인코딩 방식
 compileJava.options.encoding = 'UTF-8'
@@ -57,6 +57,9 @@ dependencies {
 
     implementation('org.springframework.boot:spring-boot-starter')
     compile('org.springframework.boot:spring-boot-starter-web')
+
+    //Redis
+    compile('org.springframework.boot:spring-boot-starter-data-redis')
 
 
 

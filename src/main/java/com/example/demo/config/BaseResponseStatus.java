@@ -37,6 +37,9 @@ public enum BaseResponseStatus {
     POST_USERS_INVALID_PHONENUMBER(false,2022,"휴대폰 번호 형식을 확인해주세요."),
     POST_USERS_INACTIVE_ACCOUNT(false,2023,"탈퇴한 계정입니다. 다시 회원가입을 진행해주세요."),
 
+    //[PATCH] /users
+    PATCH_USERS_EMPTY_PASSWORD(false,2024, "비밀번호를 입력해주세요"),
+
     // search
     NO_RESULT_FOUND(false, 2030, "검색 결과가 없습니다."),
 
@@ -56,7 +59,12 @@ public enum BaseResponseStatus {
     PATCH_REVIEW_EMPTY_CONTENTS(false, 2051, "내용을 입력해주세요."),
 
     // [PATCH] / users
-    PATCH_USERS_STATUS_INVALID_PASSWORD(false,2040, "비밀번호가 틀렸습니다."),
+    PATCH_USERS_STATUS_INVALID_PASSWORD(false,2060, "비밀번호가 틀렸습니다."),
+
+    // [Post] / auth/verification
+    POST_AUTH_VERIFICATION_EXPIRE_CERTIFICATION_NUMBER(false, 2070, "유효기간이 지난 인증번호 입니다."),
+    POST_AUTH_INVALID_CERTIFICATION_NUMBER(false, 2071, "인증번호가 일치하지 않습니다."),
+
 
 
     /**
