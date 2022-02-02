@@ -92,6 +92,9 @@ public class UserController {
     @GetMapping("/{userIdx}")
     public BaseResponse<GetProfileRes> getProfile(@PathVariable int userIdx){
         try{
+            if(userIdx==0){
+                return new BaseResponse<>(USERS_EMPTY_USER_ID);
+            }
             int userIdxByJwt = jwtService.getUserIdx();
             if(userIdx!=userIdxByJwt){
                 return new BaseResponse<>(INVALID_USER_JWT);
