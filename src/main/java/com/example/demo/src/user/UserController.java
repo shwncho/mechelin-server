@@ -112,13 +112,16 @@ public class UserController {
             if (userIdx != jwtService.getUserIdx()) {
                 return new BaseResponse<>(INVALID_USER_JWT);
             }
+            if (patchUserStatusReq.getPassword() == null || patchUserStatusReq.getPassword().equals("")) {
+                return new BaseResponse<>(PATCH_USERS_EMPTY_PASSWORD);
+            }
             PatchUserStatusRes patchUserStatusRes = userService.deleteAccount(userIdx, patchUserStatusReq.getPassword());
             return new BaseResponse<>(patchUserStatusRes);
         } catch (BaseException exception) {
             return new BaseResponse<>(exception.getStatus());
         }
     }
-
+    
 }
 
 
