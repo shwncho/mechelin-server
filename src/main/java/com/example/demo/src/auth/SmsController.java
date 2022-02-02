@@ -2,20 +2,18 @@ package com.example.demo.src.auth;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
-import com.example.demo.src.auth.model.AuthRequest;
+import com.example.demo.config.BaseResponseStatus;
+import com.example.demo.src.auth.model.PostAuthRequest;
 import com.example.demo.src.auth.model.SmsResponse;
-import com.example.demo.src.auth.model.VerifyRequest;
 import com.example.demo.utils.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Random;
 
-import static com.example.demo.config.BaseResponseStatus.INVALID_USER_JWT;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class SmsController {
@@ -29,21 +27,19 @@ public class SmsController {
         this.jwtService = jwtService;
     }
 
-    @PostMapping("/auth/{userIdx}")
-    public ResponseEntity<?> auth(@RequestBody AuthRequest authRequest, @PathVariable int userIdx) {
+    @PostMapping("/auth/phonenumber")
+    public BaseResponse<?> PostAuth(@RequestBody PostAuthRequest postAuthRequest) {
         try {
-            if (userIdx != jwtService.getUserIdx()) {
-                return ResponseEntity.ok().body(new BaseResponse<>(INVALID_USER_JWT));
+            String phoneNumber = postAuthRequest.getRecipientPhoneNumber();
+            if (isValidPhoneNumber(phoneNumber) == false) {
+                return new BaseResponse<>(BaseResponseStatus.POST_AUTH_INVALID_PHONENUMBER);
             }
             String certificationNumber = generateCertNumber();
             String contents = "[Mechelin] 인증번호:" + certificationNumber + "\n인증번호를 입력해 주세요.";
-            SmsResponse data = smsService.sendSms(authRequest.getRecipientPhoneNumber(), contents, certificationNumber);
-            return ResponseEntity.ok().body(data);
-        } catch (BaseException baseException) {
-            return ResponseEntity.badRequest().body(new BaseResponse<>(baseException.getStatus()));
-        } catch (Exception exception) {
-            System.out.println(exception);
-            return ResponseEntity.badRequest().build();
+            SmsResponse data = smsService.sendSms(phoneNumber, contents, certificationNumber);
+            return new BaseResponse<>(data);
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
         }
     }
 
@@ -58,16 +54,38 @@ public class SmsController {
         if (result > range) {
             result = result - trim;
         }
-        return String.valueOf(result);
+
+        return Integer.toString(result);
     }
 
-    @PostMapping("auth/verification/{userIdx}")
-    public BaseResponse<?> verify(@RequestBody VerifyRequest verifyRequest, @PathVariable int userIdx) {
-        try {
-            if (userIdx != jwtService.getUserIdx()) {
-                return new BaseResponse<>(INVALID_USER_JWT);
+    // 휴대폰번호 유효성 검사
+    public boolean isValidPhoneNumber(String phoneNumber) {
+        String[] check = {"010", "011", "016", "017", "018", "019"};
+
+        // 휴대폰 번호 앞자리 검사
+        String cell1 = phoneNumber.substring(0, 3);
+        for (int i = 0; i < check.length; i++) {
+            if (cell1.equals(check[i])) break;
+            if (i == check.length - 1) return false;
+        }
+        // 자리수 검사
+        if (phoneNumber.length() != 11) {
+            return false;
+        }
+        // 숫자가 아닌 값이 들어왔는지 확인
+        for (int i = 0; i < phoneNumber.length(); i++) {
+            if (phoneNumber.charAt(i) < '0' || phoneNumber.charAt(i) > '9') {
+                return false;
             }
-            return new BaseResponse<>(smsService.verify(verifyRequest));
+        }
+        return true;
+    }
+
+
+    @GetMapping("/auth")
+    public BaseResponse<?> GetAuth(@RequestParam("phoneNumber") String phoneNumber, @RequestParam("certNumber") String certNumber) {
+        try {
+            return new BaseResponse<>(smsService.getAuth(phoneNumber, certNumber));
         } catch (BaseException exception) {
             return new BaseResponse<>(exception.getStatus());
         }

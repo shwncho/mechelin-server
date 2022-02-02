@@ -35,7 +35,7 @@ public class ReviewController {
         this.reviewService = reviewService;
         this.awsS3Service = awsS3Service;
     }
-
+    // 메인화면 최근 리뷰
     @GetMapping("/{userIdx}")
     public BaseResponse<List<GetMainScreenReviewRes>> getMainScreenReview(@PathVariable("userIdx") int userIdx) {
         try {
@@ -50,9 +50,9 @@ public class ReviewController {
     }
 
 
-
+    // 상세페이지 리뷰
     @GetMapping("/{userIdx}/{storeIdx}")
-    public BaseResponse<?> getDetailReview(@PathVariable("userIdx") int userIdx, @PathVariable("storeIdx") int storeIdx, @RequestParam(name = "page") int page, @RequestParam(name = "pagesize") int pageSize) {
+    public BaseResponse<?> getDetailReview(@PathVariable("userIdx") int userIdx, @PathVariable("storeIdx") int storeIdx, @RequestParam(name = "page") int page, @RequestParam(name = "pageSize") int pageSize) {
         try {
             System.out.println(page);
             if (userIdx != jwtService.getUserIdx()) {
@@ -89,7 +89,7 @@ public class ReviewController {
 
             return new BaseResponse<>(result);
 
-        } catch(BaseException exception){
+        } catch(BaseException exception) {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
