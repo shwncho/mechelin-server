@@ -92,7 +92,7 @@ public class UserController {
     @GetMapping("/{userIdx}")
     public BaseResponse<GetProfileRes> getProfile(@PathVariable int userIdx){
         try{
-            if(userIdx==0){
+            if(userIdx<=0){
                 return new BaseResponse<>(USERS_EMPTY_USER_ID);
             }
             int userIdxByJwt = jwtService.getUserIdx();

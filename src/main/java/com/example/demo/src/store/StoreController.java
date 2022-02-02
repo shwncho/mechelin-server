@@ -95,7 +95,7 @@ public class StoreController {
     public BaseResponse<PostStoreRes> createStore(  @RequestPart PostStoreReq postStoreReq,
                                               @RequestPart(required = false) List<MultipartFile> imageFile) {
         try{
-            if(postStoreReq.getUserIdx()==0){
+            if(postStoreReq.getUserIdx()<=0){
                 return new BaseResponse<>(USERS_EMPTY_USER_ID);
             }
 
@@ -136,7 +136,7 @@ public class StoreController {
     @PatchMapping("/{userIdx}/{storeIdx}/status")
     public BaseResponse<String> deleteStore(@PathVariable int userIdx, @PathVariable int storeIdx){
         try{
-            if(userIdx==0){
+            if(userIdx<=0){
                 return new BaseResponse<>(USERS_EMPTY_USER_ID);
             }
 

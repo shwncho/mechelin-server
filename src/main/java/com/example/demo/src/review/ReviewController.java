@@ -72,10 +72,10 @@ public class ReviewController {
     @PatchMapping("/{userIdx}/{reviewIdx}/status")
     public BaseResponse<String> deleteReview(@PathVariable int userIdx, @PathVariable int reviewIdx){
         try {
-            if(userIdx==0){
+            if(userIdx<=0){
                 return new BaseResponse<>(USERS_EMPTY_USER_ID);
             }
-            if(reviewIdx==0){
+            if(reviewIdx<=0){
                 return new BaseResponse<>(REVIEWS_EMPTY_REVIEW_ID);
             }
 
@@ -99,17 +99,17 @@ public class ReviewController {
     public BaseResponse<Integer> createReview(@RequestPart PostReviewReq postReviewReq,
                                               @RequestPart(required = false) List<MultipartFile> imageFile){
         try{
-            if(postReviewReq.getUserIdx()==0){
+            if(postReviewReq.getUserIdx()<=0){
                 return new BaseResponse<>(USERS_EMPTY_USER_ID);
             }
             int userIdxByJwt = jwtService.getUserIdx();
             if (postReviewReq.getUserIdx()!=userIdxByJwt) {
                 return new BaseResponse<>(INVALID_USER_JWT);
             }
-            if(postReviewReq.getStoreIdx()==0){
+            if(postReviewReq.getStoreIdx()<=0){
                 return new BaseResponse<>(STORES_EMPTY_STORE_ID);
             }
-            if(postReviewReq.getStarRate()==0){
+            if(postReviewReq.getStarRate()<=0){
                 return new BaseResponse<>(POST_STORE_EMPTY_STAR);
             }
             if(postReviewReq.getContents().isEmpty()){
@@ -138,7 +138,7 @@ public class ReviewController {
 
             PatchReviewReq patchReviewReq = new PatchReviewReq(review.getStarRate(), review.getContents());
 
-            if (patchReviewReq.getStarRate() == 0) {
+            if (patchReviewReq.getStarRate() <= 0) {
                 return new BaseResponse<>(PATCH_REVIEW_EMPTY_STARRATE);
             }
 
