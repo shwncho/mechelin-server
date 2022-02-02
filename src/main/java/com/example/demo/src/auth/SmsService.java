@@ -4,8 +4,6 @@ import com.example.demo.config.BaseException;
 import com.example.demo.src.auth.model.Message;
 import com.example.demo.src.auth.model.SmsRequest;
 import com.example.demo.src.auth.model.SmsResponse;
-import com.example.demo.src.auth.model.VerifyRequest;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +16,6 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.transaction.Transactional;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.client.RestTemplate;
 
@@ -41,30 +38,33 @@ public class SmsService {
         this.smsDao = smsDao;
     }
 
-    public SmsResponse sendSms(String recipientPhoneNumber, String content, String certificationNumber) throws JsonProcessingException, UnsupportedEncodingException, NoSuchAlgorithmException, InvalidKeyException, URISyntaxException {
+    public SmsResponse sendSms(String recipientPhoneNumber, String content, String certificationNumber) throws BaseException{
+        try {
+            Long time = System.currentTimeMillis();
+            List<Message> messages = new ArrayList<>();
+            messages.add(new Message(recipientPhoneNumber, content));
 
-        Long time = System.currentTimeMillis();
-        List<Message> messages = new ArrayList<>();
-        messages.add(new Message(recipientPhoneNumber, content));
+            SmsRequest smsRequest = new SmsRequest("SMS", "COMM", "82", "01025912343", "test", messages);
+            ObjectMapper objectMapper = new ObjectMapper();
+            String jsonBody = objectMapper.writeValueAsString(smsRequest);
 
-        SmsRequest smsRequest = new SmsRequest("SMS", "COMM", "82", "01025912343","test", messages);
-        ObjectMapper objectMapper = new ObjectMapper();
-        String jsonBody = objectMapper.writeValueAsString(smsRequest);
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            headers.set("x-ncp-apigw-timestamp", time.toString());
+            headers.set("x-ncp-iam-access-key", Secret.accessKey);
+            String sig = makeSignature(time); //암호화
+            headers.set("x-ncp-apigw-signature-v2", sig);
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.set("x-ncp-apigw-timestamp", time.toString());
-        headers.set("x-ncp-iam-access-key", Secret.accessKey);
-        String sig = makeSignature(time); //암호화
-        headers.set("x-ncp-apigw-signature-v2", sig);
+            HttpEntity<String> body = new HttpEntity<>(jsonBody, headers);
 
-        HttpEntity<String> body = new HttpEntity<>(jsonBody, headers);
-
-        RestTemplate restTemplate = new RestTemplate();
-        SmsResponse smsResponse = restTemplate.postForObject(new URI("https://sens.apigw.ntruss.com/sms/v2/services/" + Secret.serviceId + "/messages"), body, SmsResponse.class);
-        // 휴대폰번호 + 인증번호 저장
-        smsDao.createSmsCertification(recipientPhoneNumber, certificationNumber);
-        return smsResponse;
+            RestTemplate restTemplate = new RestTemplate();
+            SmsResponse smsResponse = restTemplate.postForObject(new URI("https://sens.apigw.ntruss.com/sms/v2/services/" + Secret.serviceId + "/messages"), body, SmsResponse.class);
+            // 휴대폰번호 + 인증번호 저장
+            smsDao.createSmsCertification(recipientPhoneNumber, certificationNumber);
+            return smsResponse;
+        } catch (Exception exception) {
+            throw new BaseException(POST_AUTH_FAIL_SMS);
+        }
 
     }
     public String makeSignature(Long time) throws UnsupportedEncodingException, NoSuchAlgorithmException, InvalidKeyException {
@@ -96,21 +96,18 @@ public class SmsService {
         return encodeBase64String;
     }
 
-    public String verify(VerifyRequest verifyRequest) throws BaseException {
-        String phoneNumber = verifyRequest.getPhoneNumber();
-        String certificationNumber = verifyRequest.getCertificationNumber();
-
+    public String getAuth(String phoneNumber, String certNumber) throws BaseException {
         if (smsDao.hasKey(phoneNumber)) {
-            String storedCertificationNumber = smsDao.getSmsCertification(verifyRequest.getPhoneNumber());
-            if (certificationNumber.equals(storedCertificationNumber)) {
+            String storedCertNumber = smsDao.getSmsCertification(phoneNumber);
+            if (certNumber.equals(storedCertNumber)) {
                 smsDao.removeSmsCertification(phoneNumber);
-                return "성공";
+                String result = "인증번호: " + certNumber;
+                return result;
             } else {
-                System.out.println(storedCertificationNumber);
-                throw new BaseException(POST_AUTH_INVALID_CERTIFICATION_NUMBER);
+                throw new BaseException(GET_AUTH_INVALID_CERTNUMBER);
             }
         } else {
-            throw new BaseException(POST_AUTH_VERIFICATION_EXPIRE_CERTIFICATION_NUMBER);
+            throw new BaseException(GET_AUTH_EXPIRED_CERTNUMBER);
         }
     }
 }
