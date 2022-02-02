@@ -18,6 +18,7 @@ public class SmsDao {
     public SmsDao(StringRedisTemplate stringRedisTemplate) {
         this.stringRedisTemplate = stringRedisTemplate;
     }
+
     // 캐시에 전화번호, 인증번호 저장
     public void createSmsCertification(String phoneNumber, String certNumber) {
         stringRedisTemplate.opsForValue()
@@ -35,5 +36,4 @@ public class SmsDao {
     public boolean hasKey(String phone) {
         return stringRedisTemplate.hasKey(PREFIX + phone);
     }
-
 }

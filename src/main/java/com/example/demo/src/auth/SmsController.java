@@ -10,6 +10,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Random;
 
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
 @RestController
 public class SmsController {
 
@@ -46,6 +50,7 @@ public class SmsController {
         if (result > range) {
             result = result - trim;
         }
+
         return Integer.toString(result);
     }
 
