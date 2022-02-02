@@ -65,6 +65,7 @@ public enum BaseResponseStatus {
     GET_AUTH_EXPIRED_CERTNUMBER(false, 2070, "인증번호가 존재하지 않거나 인증시간이 초과했습니다."),
     GET_AUTH_INVALID_CERTNUMBER(false, 2071, "인증번호가 일치하지 않습니다."),
     POST_AUTH_FAIL_SMS(false, 2072, "인증문자 전송에 실패했습니다 관리자에게 문의해주세요."),
+    POST_AUTH_INVALID_PHONENUMBER(false,2073,"올바른 휴대폰번호를 입력해주세요."),
 
 
     /**
