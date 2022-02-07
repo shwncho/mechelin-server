@@ -24,7 +24,13 @@ public class ReviewProvider {
     @Transactional(readOnly = true)
     public List<GetMainScreenReviewRes> getMainScreenReview (int userIdx) throws BaseException {
         try {
-            return reviewDao.getMainScreenReview(userIdx);
+            List<GetMainScreenReviewRes> result = reviewDao.getMainScreenReview(userIdx);
+            if (result.isEmpty()) {
+                throw new BaseException(EMPTY_RECENT_REVIEWS);
+            }
+            return result;
+        } catch (BaseException baseException) {
+            throw baseException;
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }
@@ -51,7 +57,13 @@ public class ReviewProvider {
     @Transactional(readOnly = true)
     public List<GetReviewRes> getReview (int userIdx, int storeIdx, int page, int pageSize) throws BaseException {
         try {
-            return reviewDao.getReview(userIdx, storeIdx, page, pageSize);
+            List<GetReviewRes> result = reviewDao.getReview(userIdx, storeIdx, page, pageSize);
+            if (result.isEmpty()) {
+                throw new BaseException(EMPTY_REVIEWS);
+            }
+            return result;
+        } catch (BaseException baseException) {
+            throw baseException;
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }
