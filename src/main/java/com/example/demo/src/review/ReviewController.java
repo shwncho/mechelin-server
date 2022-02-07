@@ -112,7 +112,7 @@ public class ReviewController {
             if(postReviewReq.getStarRate()<=0){
                 return new BaseResponse<>(POST_STORE_EMPTY_STAR);
             }
-            if(postReviewReq.getContents().isEmpty()){
+            if(postReviewReq.getContents().isEmpty() && postReviewReq.getContents()==null){
                 return new BaseResponse<>(POST_STORE_EMPTY_CONTENTS);
             }
             List<String> fileNameList = new ArrayList<>();

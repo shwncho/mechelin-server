@@ -108,13 +108,13 @@ public class StoreController {
                 return new BaseResponse<>(POST_STORE_EMPTY_CATEGORY);
             }
 
-            if(postStoreReq.getStoreName().isEmpty()){
+            if(postStoreReq.getStoreName()==null && postStoreReq.getStoreName().isEmpty()){
                 return new BaseResponse<>(POST_STORE_EMPTY_RESTAURANT);
             }
             if(postStoreReq.getStarRate()==0){
                 return new BaseResponse<>(POST_STORE_EMPTY_STAR);
             }
-            if(postStoreReq.getContents().isEmpty()){
+            if(postStoreReq.getContents()==null && postStoreReq.getContents().isEmpty()){
                 return new BaseResponse<>(POST_STORE_EMPTY_CONTENTS);
             }
             if(storeProvider.checkStore(postStoreReq.getUserIdx(), postStoreReq.getStoreName(), postStoreReq.getAddress())==1){
