@@ -25,6 +25,7 @@ public enum BaseResponseStatus {
     EMPTY_USER(false,2005,"존재하지 않는 유저입니다."),
     EMPTY_STORE(false,2006,"존재하지 않는 식당입니다."),
     EMPTY_REVIEW(false,2007,"존재하지 않는 리뷰입니다."),
+    INVALID_FILE(false,2008,"잘못된 형식의 파일입니다."),
 
     // users
     USERS_EMPTY_USER_ID(false, 2010, "유저 아이디 값을 확인해주세요."),

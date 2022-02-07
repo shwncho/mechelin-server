@@ -104,14 +104,14 @@ public class StoreController {
                 return new BaseResponse<>(INVALID_USER_JWT);
             }
 
-            if(postStoreReq.getCategoryIdx()==0){
+            if(postStoreReq.getCategoryIdx()<=0){
                 return new BaseResponse<>(POST_STORE_EMPTY_CATEGORY);
             }
 
             if(postStoreReq.getStoreName()==null && postStoreReq.getStoreName().isEmpty()){
                 return new BaseResponse<>(POST_STORE_EMPTY_RESTAURANT);
             }
-            if(postStoreReq.getStarRate()==0){
+            if(postStoreReq.getStarRate()<=0){
                 return new BaseResponse<>(POST_STORE_EMPTY_STAR);
             }
             if(postStoreReq.getContents()==null && postStoreReq.getContents().isEmpty()){
@@ -120,10 +120,13 @@ public class StoreController {
             if(storeProvider.checkStore(postStoreReq.getUserIdx(), postStoreReq.getStoreName(), postStoreReq.getAddress())==1){
                 return new BaseResponse<>(POST_STORE_EXISTS_RESTAURANT);
             }
+
+            int checkNum =1;
             List<String> fileNameList = new ArrayList<>();
-            if(imageFile!=null) fileNameList = awsS3Service.uploadFile(imageFile);
-
-
+            for(MultipartFile image:imageFile){
+                if(image.isEmpty()) checkNum=0;
+            }
+            if(checkNum==1) fileNameList=awsS3Service.uploadFile(imageFile);
             PostStoreRes postStoreRes = storeService.createStore(postStoreReq, fileNameList);
 
             return new BaseResponse<>(postStoreRes);

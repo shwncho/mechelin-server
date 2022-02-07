@@ -47,12 +47,12 @@ public class StoreService {
             int reviewIdx=storeDao.createStore(postStoreReq);
             int storeIdx=storeDao.searchStoreIdx(postStoreReq.getUserIdx(),postStoreReq.getStoreName(),postStoreReq.getAddress());
 
-            if(!(fileNameList.isEmpty()) && fileNameList!=null) {
+            if(!fileNameList.isEmpty() && fileNameList!=null) {
                 for (String imgURL : fileNameList) {
                     storeDao.createImage(imgURL, reviewIdx);
                 }
             }
-            if(!(postStoreReq.getTagName().isEmpty()) && postStoreReq.getTagName()!=null) {
+            if(!postStoreReq.getTagName().isEmpty() && postStoreReq.getTagName()!=null) {
                 for (String tag : postStoreReq.getTagName()) {
                     int tagIdx = storeDao.checkTagName(tag);
 

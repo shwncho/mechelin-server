@@ -5,6 +5,7 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.example.demo.config.BaseException;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -19,6 +20,9 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
+import static com.example.demo.config.BaseResponseStatus.INVALID_FILE;
+
 @Service
 @RequiredArgsConstructor
 public class AwsS3Service {
@@ -31,7 +35,8 @@ public class AwsS3Service {
 
     private final AmazonS3 amazonS3;
 
-    public List<String> uploadFile(List<MultipartFile> imageFile){
+    public List<String> uploadFile(List<MultipartFile> imageFile) throws BaseException {
+
         List<String> fileNameList = new ArrayList<>();
 
         // forEach 구문을 통해 multipartFile로 넘어온 파일들 하나씩 fileNameList에 추가
@@ -41,16 +46,15 @@ public class AwsS3Service {
             objectMetadata.setContentLength(file.getSize());
             objectMetadata.setContentType(file.getContentType());
 
-            try(InputStream inputStream = file.getInputStream()) {
+            try (InputStream inputStream = file.getInputStream()) {
                 amazonS3.putObject(new PutObjectRequest(bucket, fileName, inputStream, objectMetadata)
                         .withCannedAcl(CannedAccessControlList.PublicRead));
-            } catch(IOException e) {
+            } catch (IOException e) {
                 throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "파일 업로드에 실패했습니다.");
             }
 
             fileNameList.add(amazonS3.getUrl(bucket, fileName).toString());
         });
-
         return fileNameList;
     }
 
@@ -66,9 +70,10 @@ public class AwsS3Service {
 
     // file 형식이 잘못된 경우를 확인하기 위해 만들어진 로직이며, 파일 타입과 상관없이 업로드할 수 있게 하기 위해 .의 존재 유무만 판단하였습니다.
     // 유저가 png 파일만을넘겨주기 때문에 나중에 필요할시 사용
-    private String getFileExtension(String fileName) {
+    public String getFileExtension(String fileName) {
         try {
-            return fileName.substring(fileName.lastIndexOf("."));
+            String ext = fileName.substring(fileName.lastIndexOf(".")+1);
+            return ext;
         } catch (StringIndexOutOfBoundsException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "잘못된 형식의 파일(" + fileName + ") 입니다.");
         }
