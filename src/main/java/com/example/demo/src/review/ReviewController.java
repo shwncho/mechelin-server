@@ -37,7 +37,7 @@ public class ReviewController {
     }
     // 메인화면 최근 리뷰
     @GetMapping("/{userIdx}")
-    public BaseResponse<List<GetMainScreenReviewRes>> getMainScreenReview(@PathVariable("userIdx") Integer userIdx) {
+    public BaseResponse<List<GetMainScreenReviewRes>> getMainScreenReview(@PathVariable("userIdx") int userIdx) {
         try {
             if (userIdx <= 0) {
                 return new BaseResponse<>(USERS_EMPTY_USER_ID);
