@@ -357,8 +357,13 @@ public class StoreDao {
                 getStoresParams);
     }
 
+    //삭제하기 전, 유저가 저장한 식당존재 확인
+    public int deleteCheckStore(int userIdx, int storeIdx){
+        String Query="select exists(select storeIdx from Store where userIdx=? AND storeIdx=?)";
+        return this.jdbcTemplate.queryForObject(Query,int.class,userIdx,storeIdx);
+    }
 
-    //Store가 이미 존재하는지 확인
+    //Store가 이미 존재하는지 확인(식당 검색했을 때 이미 존재하는지를 확인, 체인점도 고려)
     public int checkStore(int userIdx, String storeName,String address){
         String Query="select exists(select storeIdx\n" +
                 "    from Store\n" +

@@ -186,5 +186,9 @@ public class ReviewDao {
         Object[] params = new Object[]{patchReviewReq.getStarRate(), patchReviewReq.getContents(), reviewIdx};
         return this.jdbcTemplate.update(query, params);
     }
+    public int checkReview(int userIdx, int reviewIdx){
+        String Query="select exists(select reviewIdx from Review where userIdx=? AND reviewIdx=?)";
+        return this.jdbcTemplate.queryForObject(Query,int.class,userIdx,reviewIdx);
+    }
 
 }

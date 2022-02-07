@@ -95,7 +95,7 @@ public class StoreController {
     public BaseResponse<PostStoreRes> createStore(  @RequestPart PostStoreReq postStoreReq,
                                               @RequestPart(required = false) List<MultipartFile> imageFile) {
         try{
-            if(postStoreReq.getUserIdx()==0){
+            if(postStoreReq.getUserIdx()<=0){
                 return new BaseResponse<>(USERS_EMPTY_USER_ID);
             }
 
@@ -108,13 +108,13 @@ public class StoreController {
                 return new BaseResponse<>(POST_STORE_EMPTY_CATEGORY);
             }
 
-            if(postStoreReq.getStoreName().isEmpty()){
+            if(postStoreReq.getStoreName()==null && postStoreReq.getStoreName().isEmpty()){
                 return new BaseResponse<>(POST_STORE_EMPTY_RESTAURANT);
             }
             if(postStoreReq.getStarRate()==0){
                 return new BaseResponse<>(POST_STORE_EMPTY_STAR);
             }
-            if(postStoreReq.getContents().isEmpty()){
+            if(postStoreReq.getContents()==null && postStoreReq.getContents().isEmpty()){
                 return new BaseResponse<>(POST_STORE_EMPTY_CONTENTS);
             }
             if(storeProvider.checkStore(postStoreReq.getUserIdx(), postStoreReq.getStoreName(), postStoreReq.getAddress())==1){
@@ -136,7 +136,7 @@ public class StoreController {
     @PatchMapping("/{userIdx}/{storeIdx}/status")
     public BaseResponse<String> deleteStore(@PathVariable int userIdx, @PathVariable int storeIdx){
         try{
-            if(userIdx==0){
+            if(userIdx<=0){
                 return new BaseResponse<>(USERS_EMPTY_USER_ID);
             }
 

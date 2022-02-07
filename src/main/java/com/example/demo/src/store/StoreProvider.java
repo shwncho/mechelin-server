@@ -108,8 +108,17 @@ public class StoreProvider {
         }
     }
 
+    //삭제 전, 식당 존재 확인
+    @Transactional(readOnly = true)
+    public int deleteCheckStore(int userIdx, int storeIdx) throws BaseException{
+        try{
+            return storeDao.deleteCheckStore(userIdx, storeIdx);
+        } catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
 
-    //식당 존재 확인
+    //식당 생성 전, 식당 존재 확인
     @Transactional(readOnly = true)
     public int checkStore(int userIdx, String storeName, String address){
 

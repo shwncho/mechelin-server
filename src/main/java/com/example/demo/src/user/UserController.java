@@ -46,17 +46,20 @@ public class UserController {
         if (!isRegexEmail(postUserReq.getEmail())) {
             return new BaseResponse<>(POST_USERS_INVALID_EMAIL);
         }
-        if (postUserReq.getPassword().contains(" ")){
+        if (postUserReq.getPassword()==null){
             return new BaseResponse<>(NULL_ERROR);
         }
         if (!isRegexPassWord(postUserReq.getPassword())){
             return new BaseResponse<>(POST_USERS_INVALID_PASSWORD);
         }
-        if(postUserReq.getNickName().contains(" ")){
+        if(postUserReq.getNickName()==null){
             return new BaseResponse<>(NULL_ERROR);
         }
         if (!isRegexNickName(postUserReq.getNickName())){
             return new BaseResponse<>(POST_USERS_INVALID_NICKNAME);
+        }
+        if(postUserReq.getPhoneNumber()==null){
+            return new BaseResponse<>(NULL_ERROR);
         }
         if (!isRegexPhoneNumber(postUserReq.getPhoneNumber())){
             return new BaseResponse<>(POST_USERS_INVALID_PHONENUMBER);
@@ -80,6 +83,10 @@ public class UserController {
             return new BaseResponse<>(POST_USERS_INVALID_EMAIL);
         }
 
+        if(postLoginReq.getPassword().isEmpty() && postLoginReq.getPassword() ==null){
+            return new BaseResponse<>(NULL_ERROR);
+        }
+
         try {
             PostLoginRes postLoginRes = userProvider.logIn(postLoginReq);
             return new BaseResponse<>(postLoginRes);
@@ -92,6 +99,9 @@ public class UserController {
     @GetMapping("/{userIdx}")
     public BaseResponse<GetProfileRes> getProfile(@PathVariable int userIdx){
         try{
+            if(userIdx<=0){
+                return new BaseResponse<>(USERS_EMPTY_USER_ID);
+            }
             int userIdxByJwt = jwtService.getUserIdx();
             if(userIdx!=userIdxByJwt){
                 return new BaseResponse<>(INVALID_USER_JWT);

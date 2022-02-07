@@ -31,6 +31,11 @@ public class UserDao {
         return this.jdbcTemplate.queryForObject(lastInserIdQuery, int.class);
     }
 
+    public int checkUser(int userIdx){
+        String Query="select exists(select userIdx from User where userIdx=?)";
+        return this.jdbcTemplate.queryForObject(Query,int.class,userIdx);
+    }
+
     public int checkEmail(String email) {
         String checkEmailQuery = "select exists(select email from User where email = ?)";
         String checkEmailParams = email;
