@@ -28,6 +28,8 @@ public enum BaseResponseStatus {
 
     // users
     USERS_EMPTY_USER_ID(false, 2010, "유저 아이디 값을 확인해주세요."),
+    EMPTY_PAGE(false,2011, "잘못된 페이지 요청입니다."),
+    EMPTY_PAGE_SIZE(false, 2012, "잘못된 페이지 사이즈 요청입니다."),
 
     // [POST] /users
     POST_USERS_EMPTY_EMAIL(false, 2015, "존재하지 않는 이메일입니다."),
@@ -64,11 +66,13 @@ public enum BaseResponseStatus {
     // [PATCH] / users
     PATCH_USERS_STATUS_INVALID_PASSWORD(false,2060, "비밀번호가 틀렸습니다."),
 
+
     // auth
     GET_AUTH_EXPIRED_CERTNUMBER(false, 2070, "인증번호가 존재하지 않거나 인증시간이 초과했습니다."),
     GET_AUTH_INVALID_CERTNUMBER(false, 2071, "인증번호가 일치하지 않습니다."),
     POST_AUTH_FAIL_SMS(false, 2072, "인증문자 전송에 실패했습니다 관리자에게 문의해주세요."),
-    POST_AUTH_INVALID_PHONENUMBER(false,2073,"올바른 휴대폰번호를 입력해주세요."),
+    AUTH_INVALID_PHONENUMBER(false,2073,"올바른 휴대폰번호를 입력해주세요."),
+    EMPTY_CERT_NUMBER(false, 2074, "인증번호를 입력해 주세요."),
 
 
     /**
@@ -81,6 +85,9 @@ public enum BaseResponseStatus {
     DUPLICATED_EMAIL(false, 3013, "중복된 이메일입니다."),
     FAILED_TO_LOGIN(false,3014,"비밀번호가 틀렸습니다."),
 
+    // [GET] /reviews
+    EMPTY_RECENT_REVIEWS(false, 3015, "최근리뷰가 존재하지 않습니다."),
+    EMPTY_REVIEWS(false,3016, "리뷰가 존재하지 않습니다."),
 
     /**
      * 4000 : Database, Server 오류

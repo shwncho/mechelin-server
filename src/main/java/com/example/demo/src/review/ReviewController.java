@@ -37,8 +37,11 @@ public class ReviewController {
     }
     // 메인화면 최근 리뷰
     @GetMapping("/{userIdx}")
-    public BaseResponse<List<GetMainScreenReviewRes>> getMainScreenReview(@PathVariable("userIdx") int userIdx) {
+    public BaseResponse<List<GetMainScreenReviewRes>> getMainScreenReview(@PathVariable("userIdx") Integer userIdx) {
         try {
+            if (userIdx <= 0) {
+                return new BaseResponse<>(USERS_EMPTY_USER_ID);
+            }
             if (userIdx != jwtService.getUserIdx()) {
                 return new BaseResponse<>(INVALID_USER_JWT);
             }
@@ -54,7 +57,18 @@ public class ReviewController {
     @GetMapping("/{userIdx}/{storeIdx}")
     public BaseResponse<?> getDetailReview(@PathVariable("userIdx") int userIdx, @PathVariable("storeIdx") int storeIdx, @RequestParam(name = "page") int page, @RequestParam(name = "pageSize") int pageSize) {
         try {
-            System.out.println(page);
+            if(userIdx <= 0){
+                return new BaseResponse<>(USERS_EMPTY_USER_ID);
+            }
+            if (storeIdx <= 0) {
+                return new BaseResponse<>(STORES_EMPTY_STORE_ID);
+            }
+            if (page <= 0) {
+                return new BaseResponse<>(EMPTY_PAGE);
+            }
+            if (pageSize <= 0) {
+                return new BaseResponse<>(EMPTY_PAGE_SIZE);
+            }
             if (userIdx != jwtService.getUserIdx()) {
                 return new BaseResponse<>(INVALID_USER_JWT);
             }
