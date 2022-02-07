@@ -32,7 +32,7 @@ public class SmsController {
         try {
             String phoneNumber = postAuthRequest.getRecipientPhoneNumber();
             if (isValidPhoneNumber(phoneNumber) == false) {
-                return new BaseResponse<>(BaseResponseStatus.POST_AUTH_INVALID_PHONENUMBER);
+                return new BaseResponse<>(BaseResponseStatus.AUTH_INVALID_PHONENUMBER);
             }
             String certificationNumber = generateCertNumber();
             String contents = "[Mechelin] 인증번호:" + certificationNumber + "\n인증번호를 입력해 주세요.";
@@ -60,8 +60,8 @@ public class SmsController {
 
     // 휴대폰번호 유효성 검사
     public boolean isValidPhoneNumber(String phoneNumber) {
+        if (phoneNumber == null) return false;
         String[] check = {"010", "011", "016", "017", "018", "019"};
-
         // 휴대폰 번호 앞자리 검사
         String cell1 = phoneNumber.substring(0, 3);
         for (int i = 0; i < check.length; i++) {
@@ -85,6 +85,12 @@ public class SmsController {
     @GetMapping("/auth")
     public BaseResponse<?> GetAuth(@RequestParam("phoneNumber") String phoneNumber, @RequestParam("certNumber") String certNumber) {
         try {
+            if (isValidPhoneNumber(phoneNumber) == false) {
+                return new BaseResponse<>(BaseResponseStatus.AUTH_INVALID_PHONENUMBER);
+            }
+            if (certNumber.equals("")) {
+                return new BaseResponse<>(BaseResponseStatus.EMPTY_CERT_NUMBER);
+            }
             return new BaseResponse<>(smsService.getAuth(phoneNumber, certNumber));
         } catch (BaseException exception) {
             return new BaseResponse<>(exception.getStatus());
