@@ -82,15 +82,15 @@ public class UserDao {
 
     // 프로필: 해당 User의 프로필 페이지를 조회한다.
     public GetProfileRes getProfile(int userIdx){
-        String getProfileQuery= "SELECT u.nickName, u.email, count(distinct s.storeIdx) as `storeCnt`, count(r.reviewIdx) as `reviewCnt`\n" +
-                "    FROM User as u\n" +
-                "        INNER JOIN Review as r\n" +
-                "            ON r.userIdx = u.userIdx\n" +
-                "        INNER JOIN Store as s\n" +
-                "            ON s.storeIdx = r.storeIdx\n" +
-                "    WHERE u.userIdx=? AND s.status='A' AND r.status='A'";
+        String getProfileQuery= "SELECT nickName, email, storeCnt, reviewCnt" +
+                                "    FROM("+
+                                        "select u.userIdx, u.email, u.nickName"+
+                                        ",(select count(s.storeIdx) from Store as s where u.userIdx = s.userIdx and s.status='A') as storeCnt"+
+                                        ",(select count(r.reviewIdx) from Review as r where u.userIdx = r.userIdx and r.status='A') as reviewCnt"+
+                                            "   from User as u"+
+                                         ") as t"+
+                                "    WHERE t.userIdx=?";
         int getProfileParams = userIdx;
-
         return this.jdbcTemplate.queryForObject(getProfileQuery,
                 (rs, rowNum) -> new GetProfileRes(
                         rs.getString("nickName"),

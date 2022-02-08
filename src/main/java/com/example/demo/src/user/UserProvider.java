@@ -44,7 +44,7 @@ public class UserProvider {
         }
 
         if (postLoginReq.getPassword().equals(password)) {
-            if(checkStatus(postLoginReq.getEmail())== "D") {
+            if(checkStatus(postLoginReq.getEmail()).equals("D")) {
                 throw new BaseException(POST_USERS_INACTIVE_ACCOUNT);
             }
 

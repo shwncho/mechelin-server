@@ -148,7 +148,7 @@ public class StoreController {
                 return new BaseResponse<>(INVALID_USER_JWT);
             }
 
-            if(storeIdx==0){
+            if(storeIdx<=0){
                 return new BaseResponse<>(STORES_EMPTY_STORE_ID);
             }
 

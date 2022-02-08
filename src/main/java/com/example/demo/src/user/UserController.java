@@ -86,7 +86,6 @@ public class UserController {
         if(postLoginReq.getPassword().isEmpty() && postLoginReq.getPassword() ==null){
             return new BaseResponse<>(NULL_ERROR);
         }
-
         try {
             PostLoginRes postLoginRes = userProvider.logIn(postLoginReq);
             return new BaseResponse<>(postLoginRes);
