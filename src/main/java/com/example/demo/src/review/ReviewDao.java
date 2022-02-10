@@ -182,9 +182,13 @@ public class ReviewDao {
 
     // 리뷰 수정
     public int editReview(PatchReviewReq patchReviewReq, int reviewIdx) {
-        String query = "update Review set starRate = ?, contents = ? where reviewIdx = ?";
+        String query = "update Review set starRate = ?, contents = ? where reviewIdx = ? and status = 'A'";
         Object[] params = new Object[]{patchReviewReq.getStarRate(), patchReviewReq.getContents(), reviewIdx};
         return this.jdbcTemplate.update(query, params);
+    }
+    public int checkReview(int userIdx, int reviewIdx){
+        String Query="select exists(select reviewIdx from Review where userIdx=? AND reviewIdx=?)";
+        return this.jdbcTemplate.queryForObject(Query,int.class,userIdx,reviewIdx);
     }
 
 }

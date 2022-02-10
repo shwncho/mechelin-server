@@ -133,10 +133,17 @@ public class ReviewController {
     @PatchMapping("/{userIdx}/{reviewIdx}")
     public BaseResponse<String> editReview(@PathVariable("userIdx") int userIdx, @PathVariable("reviewIdx") int reviewIdx, @RequestBody Review review) {
         try {
-            int userIdxByJwt = jwtService.getUserIdx();
 
-            if (userIdx != userIdxByJwt) {
+            if (userIdx <= 0) {
+                return new BaseResponse<>(USERS_EMPTY_USER_ID);
+            }
+
+/*            if (userIdx != jwtService.getUserIdx()) {
                 return new BaseResponse<>(INVALID_USER_JWT);
+            }*/
+
+            if (reviewIdx <= 0) {
+                return new BaseResponse<>(REVIEWS_EMPTY_REVIEW_ID);
             }
 
             PatchReviewReq patchReviewReq = new PatchReviewReq(review.getStarRate(), review.getContents());

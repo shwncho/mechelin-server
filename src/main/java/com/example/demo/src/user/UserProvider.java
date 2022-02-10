@@ -44,7 +44,7 @@ public class UserProvider {
         }
 
         if (postLoginReq.getPassword().equals(password)) {
-            if(checkStatus(postLoginReq.getEmail())== "D") {
+            if(checkStatus(postLoginReq.getEmail()).equals("D")) {
                 throw new BaseException(POST_USERS_INACTIVE_ACCOUNT);
             }
 
@@ -54,6 +54,14 @@ public class UserProvider {
 
         } else {
             throw new BaseException(FAILED_TO_LOGIN);
+        }
+    }
+    @Transactional(readOnly = true)
+    public int checkUser(int userIdx) throws BaseException{
+        try{
+            return userDao.checkUser(userIdx);
+        } catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
         }
     }
     @Transactional(readOnly = true)
@@ -92,6 +100,9 @@ public class UserProvider {
     @Transactional(readOnly = true)
     public GetProfileRes getProfile(int userIdx) throws BaseException{
         try {
+            if(userDao.checkUser(userIdx)==0){
+                throw new BaseException(EMPTY_USER);
+            }
             GetProfileRes getProfileRes = userDao.getProfile(userIdx);
             return getProfileRes;
         } catch (Exception exception){

@@ -22,9 +22,16 @@ public enum BaseResponseStatus {
     INVALID_JWT(false, 2002, "유효하지 않은 JWT입니다."),
     INVALID_USER_JWT(false,2003,"권한이 없는 유저의 접근입니다."),
     NULL_ERROR(false,2004,"공백을 허용하지 않습니다."),
+    EMPTY_USER(false,2005,"존재하지 않는 유저입니다."),
+    EMPTY_STORE(false,2006,"존재하지 않는 식당입니다."),
+    EMPTY_REVIEW(false,2007,"존재하지 않는 리뷰입니다."),
+    INVALID_FILE(false,2008,"잘못된 형식의 파일입니다."),
+
 
     // users
     USERS_EMPTY_USER_ID(false, 2010, "유저 아이디 값을 확인해주세요."),
+    EMPTY_PAGE(false,2011, "잘못된 페이지 요청입니다."),
+    EMPTY_PAGE_SIZE(false, 2012, "잘못된 페이지 사이즈 요청입니다."),
 
     // [POST] /users
     POST_USERS_EMPTY_EMAIL(false, 2015, "존재하지 않는 이메일입니다."),
@@ -37,6 +44,9 @@ public enum BaseResponseStatus {
     POST_USERS_INVALID_PHONENUMBER(false,2022,"휴대폰 번호 형식을 확인해주세요."),
     POST_USERS_INACTIVE_ACCOUNT(false,2023,"탈퇴한 계정입니다. 다시 회원가입을 진행해주세요."),
 
+    //[PATCH] /users
+    PATCH_USERS_EMPTY_PASSWORD(false,2024, "비밀번호를 입력해주세요"),
+
     // search
     NO_RESULT_FOUND(false, 2030, "검색 결과가 없습니다."),
 
@@ -48,16 +58,29 @@ public enum BaseResponseStatus {
     POST_STORE_EMPTY_STAR(false,2043,"식당에 점수를 매겨주세요."),
     POST_STORE_EMPTY_CONTENTS(false,2044,"내용을 입력해주세요."),
     STORES_EMPTY_STORE_ID(false,2045,"식당 아이디 값을 확인해주세요."),
+    STORE_EMPTY_CATEGORY_ID(false, 2046, "카테고리 아이디 값을 확인해주세요"),
+    STORE_INVALID_STAR_RATING(false, 2047, "starRating 값을 확인해주세요."),
+    STORE_INVALID_DELIVERY_SERVICE(false, 2048, "deliveryService 값을 확인해주세요."),
+
     //reviews
     REVIEWS_EMPTY_REVIEW_ID(false,2050,"리뷰 아이디 값을 확인해주세요."),
-
-    // reviews
-    PATCH_REVIEW_EMPTY_STARRATE(false, 2050, "별점을 설정해주세요."),
-    PATCH_REVIEW_EMPTY_CONTENTS(false, 2051, "내용을 입력해주세요."),
-
+    PATCH_REVIEW_EMPTY_STARRATE(false, 2051, "별점을 설정해주세요."),
+    PATCH_REVIEW_EMPTY_CONTENTS(false, 2052, "내용을 입력해주세요."),
 
     // [PATCH] / users
-    PATCH_USERS_STATUS_INVALID_PASSWORD(false,2040, "비밀번호가 틀렸습니다."),
+    PATCH_USERS_STATUS_INVALID_PASSWORD(false,2060, "비밀번호가 틀렸습니다."),
+
+
+    // auth
+    GET_AUTH_EXPIRED_CERTNUMBER(false, 2070, "인증번호가 존재하지 않거나 인증시간이 초과했습니다."),
+    GET_AUTH_INVALID_CERTNUMBER(false, 2071, "인증번호가 일치하지 않습니다."),
+    POST_AUTH_FAIL_SMS(false, 2072, "인증문자 전송에 실패했습니다 관리자에게 문의해주세요."),
+    AUTH_INVALID_PHONENUMBER(false,2073,"올바른 휴대폰번호를 입력해주세요."),
+    EMPTY_CERT_NUMBER(false, 2074, "인증번호를 입력해 주세요."),
+
+    // search
+    SEARCH_EMPTY_KEYWORD(false, 2080, "검색할 키워드를 입력해주세요."),
+    SEARCH_EMPTY_TAG_ID(false, 2081, "해시태그 아이디 값을 확인해주세요"),
 
 
     /**
@@ -70,6 +93,9 @@ public enum BaseResponseStatus {
     DUPLICATED_EMAIL(false, 3013, "중복된 이메일입니다."),
     FAILED_TO_LOGIN(false,3014,"비밀번호가 틀렸습니다."),
 
+    // [GET] /reviews
+    EMPTY_RECENT_REVIEWS(false, 3015, "최근리뷰가 존재하지 않습니다."),
+    EMPTY_REVIEWS(false,3016, "리뷰가 존재하지 않습니다."),
 
     /**
      * 4000 : Database, Server 오류

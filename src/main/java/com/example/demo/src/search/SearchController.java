@@ -39,6 +39,15 @@ public class SearchController {
     @GetMapping("/{userIdx}")
     public BaseResponse<GetSearchRes> getSearch(@PathVariable("userIdx") int userIdx, @RequestParam("keyword") String keyword) {
         try {
+
+            if (userIdx <= 0){
+                return new BaseResponse<>(USERS_EMPTY_USER_ID);
+            }
+
+            if (keyword == null || keyword.isEmpty()) {
+                return new BaseResponse<>(SEARCH_EMPTY_KEYWORD);
+            }
+
             int userIdxByJwt = jwtService.getUserIdx();
 
             if (userIdx != userIdxByJwt) {
@@ -58,6 +67,23 @@ public class SearchController {
     @GetMapping("/{userIdx}/hashtag")
     public BaseResponse<List<GetStoreRes>> getStoresByHashTag(@PathVariable("userIdx") int userIdx, @RequestParam("tagIdx") int tagIdx, @RequestParam(defaultValue = "1") int page, @RequestParam int pageSize) {
         try {
+
+            if (userIdx <= 0){
+                return new BaseResponse<>(USERS_EMPTY_USER_ID);
+            }
+
+            if (tagIdx <= 0) {
+                return new BaseResponse<>(SEARCH_EMPTY_TAG_ID);
+            }
+
+            if (page <= 0) {
+                return new BaseResponse<>(EMPTY_PAGE);
+            }
+
+            if (pageSize <= 0) {
+                return new BaseResponse<>(EMPTY_PAGE_SIZE);
+            }
+
             int userIdxByJwt = jwtService.getUserIdx();
 
             if (userIdx != userIdxByJwt) {

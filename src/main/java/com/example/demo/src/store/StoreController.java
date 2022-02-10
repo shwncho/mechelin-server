@@ -47,6 +47,31 @@ public class StoreController {
 
     public BaseResponse<List<GetStoreRes>> getCategory (@PathVariable("userIdx") int userIdx, @PathVariable("categoryIdx") int categoryIdx, @RequestParam(value="starRating", required = false, defaultValue = "N") String starRating, @RequestParam(value = "deliveryService", required = false, defaultValue = "N") String deliveryService, @RequestParam(defaultValue = "1") int page, @RequestParam int pageSize) {
         try {
+
+            if (userIdx <= 0) {
+                return new BaseResponse<>(USERS_EMPTY_USER_ID);
+            }
+
+            if (categoryIdx <= 0) {
+                return new BaseResponse<>(STORE_EMPTY_CATEGORY_ID);
+            }
+
+            if (!starRating.equals("Y") && !starRating.equals("N")) {
+                return new BaseResponse<>(STORE_INVALID_STAR_RATING);
+            }
+
+            if (!deliveryService.equals("Y") && !deliveryService.equals("N")) {
+                return new BaseResponse<>(STORE_INVALID_DELIVERY_SERVICE);
+            }
+
+            if (page <= 0) {
+                return new BaseResponse<>(EMPTY_PAGE);
+            }
+
+            if (pageSize <= 0) {
+                return new BaseResponse<>(EMPTY_PAGE_SIZE);
+            }
+
             int userIdxByJwt = jwtService.getUserIdx();
 
             if (userIdx != userIdxByJwt) {
@@ -95,7 +120,7 @@ public class StoreController {
     public BaseResponse<PostStoreRes> createStore(  @RequestPart PostStoreReq postStoreReq,
                                               @RequestPart(required = false) List<MultipartFile> imageFile) {
         try{
-            if(postStoreReq.getUserIdx()==0){
+            if(postStoreReq.getUserIdx()<=0){
                 return new BaseResponse<>(USERS_EMPTY_USER_ID);
             }
 
@@ -104,26 +129,29 @@ public class StoreController {
                 return new BaseResponse<>(INVALID_USER_JWT);
             }
 
-            if(postStoreReq.getCategoryIdx()==0){
+            if(postStoreReq.getCategoryIdx()<=0){
                 return new BaseResponse<>(POST_STORE_EMPTY_CATEGORY);
             }
 
-            if(postStoreReq.getStoreName().isEmpty()){
+            if(postStoreReq.getStoreName()==null && postStoreReq.getStoreName().isEmpty()){
                 return new BaseResponse<>(POST_STORE_EMPTY_RESTAURANT);
             }
-            if(postStoreReq.getStarRate()==0){
+            if(postStoreReq.getStarRate()<=0){
                 return new BaseResponse<>(POST_STORE_EMPTY_STAR);
             }
-            if(postStoreReq.getContents().isEmpty()){
+            if(postStoreReq.getContents()==null && postStoreReq.getContents().isEmpty()){
                 return new BaseResponse<>(POST_STORE_EMPTY_CONTENTS);
             }
             if(storeProvider.checkStore(postStoreReq.getUserIdx(), postStoreReq.getStoreName(), postStoreReq.getAddress())==1){
                 return new BaseResponse<>(POST_STORE_EXISTS_RESTAURANT);
             }
+
+            int checkNum =1;
             List<String> fileNameList = new ArrayList<>();
-            if(imageFile!=null) fileNameList = awsS3Service.uploadFile(imageFile);
-
-
+            for(MultipartFile image:imageFile){
+                if(image.isEmpty()) checkNum=0;
+            }
+            if(checkNum==1) fileNameList=awsS3Service.uploadFile(imageFile);
             PostStoreRes postStoreRes = storeService.createStore(postStoreReq, fileNameList);
 
             return new BaseResponse<>(postStoreRes);
@@ -136,7 +164,7 @@ public class StoreController {
     @PatchMapping("/{userIdx}/{storeIdx}/status")
     public BaseResponse<String> deleteStore(@PathVariable int userIdx, @PathVariable int storeIdx){
         try{
-            if(userIdx==0){
+            if(userIdx<=0){
                 return new BaseResponse<>(USERS_EMPTY_USER_ID);
             }
 
@@ -145,7 +173,7 @@ public class StoreController {
                 return new BaseResponse<>(INVALID_USER_JWT);
             }
 
-            if(storeIdx==0){
+            if(storeIdx<=0){
                 return new BaseResponse<>(STORES_EMPTY_STORE_ID);
             }
 
