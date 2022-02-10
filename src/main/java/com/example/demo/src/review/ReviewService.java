@@ -73,11 +73,11 @@ public class ReviewService {
         }
     }
     @Transactional(rollbackFor = BaseException.class)
-    public int createReview(PostReviewReq postReviewReq, List<String> fileNameList) throws BaseException{
+    public PostReviewRes createReview(PostReviewReq postReviewReq, List<String> fileNameList) throws BaseException{
         try{
             int reviewIdx = reviewDao.createReview(postReviewReq);
 
-            if(!(fileNameList.isEmpty())) {
+            if(!(fileNameList.isEmpty()) && fileNameList!=null) {
                 for (String imgURL : fileNameList) {
                     storeDao.createImage(imgURL, reviewIdx);
                 }
@@ -94,7 +94,7 @@ public class ReviewService {
                 }
             }
 
-            return reviewIdx;
+            return new PostReviewRes(reviewIdx, fileNameList) ;
         } catch (Exception exception){
             throw new BaseException(DATABASE_ERROR);
         }

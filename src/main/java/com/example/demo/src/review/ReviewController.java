@@ -110,7 +110,7 @@ public class ReviewController {
 
     @ResponseBody
     @PostMapping(value="",consumes = {"multipart/form-data"})
-    public BaseResponse<Integer> createReview(@RequestPart PostReviewReq postReviewReq,
+    public BaseResponse<PostReviewRes> createReview(@RequestPart PostReviewReq postReviewReq,
                                               @RequestPart(required = false) List<MultipartFile> imageFile){
         try{
             if(postReviewReq.getUserIdx()<=0){
@@ -129,11 +129,15 @@ public class ReviewController {
             if(postReviewReq.getContents().isEmpty() && postReviewReq.getContents()==null){
                 return new BaseResponse<>(POST_STORE_EMPTY_CONTENTS);
             }
+            int checkNum =1;
             List<String> fileNameList = new ArrayList<>();
-            if(imageFile!=null) fileNameList = awsS3Service.uploadFile(imageFile);
+            for(MultipartFile image:imageFile){
+                if(image.isEmpty()) checkNum=0;
+            }
+            if(checkNum==1) fileNameList=awsS3Service.uploadFile(imageFile);
 
-            int reviewIdx = reviewService.createReview(postReviewReq, fileNameList);
-            return new BaseResponse<>(reviewIdx);
+            PostReviewRes postReviewRes = reviewService.createReview(postReviewReq, fileNameList);
+            return new BaseResponse<>(postReviewRes);
         } catch(BaseException exception){
             return new BaseResponse<>((exception.getStatus()));
         }

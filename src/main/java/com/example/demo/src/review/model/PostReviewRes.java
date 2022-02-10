@@ -1,16 +1,12 @@
-package com.example.demo.src.store.model;
-
+package com.example.demo.src.review.model;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-
 import java.util.List;
-
 @Getter
 @Setter
 @AllArgsConstructor
-public class PostStoreRes {
-    private int userIdx;
-    private int storeIdx;
+public class PostReviewRes {
+    private int reviewIdx;
     private List<String> fileNameList;
 }
