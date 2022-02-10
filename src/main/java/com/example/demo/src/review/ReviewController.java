@@ -156,9 +156,9 @@ public class ReviewController {
                 return new BaseResponse<>(USERS_EMPTY_USER_ID);
             }
 
-/*            if (userIdx != jwtService.getUserIdx()) {
+            if (userIdx != jwtService.getUserIdx()) {
                 return new BaseResponse<>(INVALID_USER_JWT);
-            }*/
+            }
 
             if (reviewIdx <= 0) {
                 return new BaseResponse<>(REVIEWS_EMPTY_REVIEW_ID);
@@ -174,7 +174,7 @@ public class ReviewController {
                 return new BaseResponse<>(PATCH_REVIEW_EMPTY_CONTENTS);
             }
 
-            reviewService.editReview(patchReviewReq, reviewIdx);
+            reviewService.editReview(patchReviewReq, userIdx, reviewIdx);
 
             String result = "리뷰 수정 성공했습니다.";
             return new BaseResponse<>(result);

@@ -102,7 +102,16 @@ public class ReviewService {
 
     // 리뷰 수정
     @Transactional
-    public void editReview(PatchReviewReq patchReviewReq, int reviewIdx) throws BaseException{
+    public void editReview(PatchReviewReq patchReviewReq, int userIdx, int reviewIdx) throws BaseException{
+
+        if (userProvider.checkUser(userIdx) == 0) {
+            throw new BaseException(EMPTY_USER);
+        }
+
+        if (reviewProvider.checkReview(userIdx, reviewIdx) == 0) {
+            throw new BaseException(EMPTY_REVIEW);
+        }
+
         try {
             int result = reviewDao.editReview(patchReviewReq, reviewIdx);
             if (result == 0) {
@@ -112,5 +121,6 @@ public class ReviewService {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+
 
 }

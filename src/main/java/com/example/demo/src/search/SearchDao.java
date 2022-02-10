@@ -117,4 +117,12 @@ public class SearchDao {
                 params);
     }
 
+    // 태그 확인
+    public int checkTag(int userIdx, int tagIdx) {
+        String query = "select exists(select RT.tagIdx from ReviewTag RT inner join Review R on RT.reviewIdx = R.reviewIdx where RT.tagIdx = ? and R.userIdx = ?)";
+        Object[] params = new Object[]{tagIdx, userIdx};
+        return this.jdbcTemplate.queryForObject(query, int.class, params);
+    }
+
+
 }

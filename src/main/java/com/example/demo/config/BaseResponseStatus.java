@@ -26,6 +26,7 @@ public enum BaseResponseStatus {
     EMPTY_STORE(false,2006,"존재하지 않는 식당입니다."),
     EMPTY_REVIEW(false,2007,"존재하지 않는 리뷰입니다."),
     INVALID_FILE(false,2008,"잘못된 형식의 파일입니다."),
+    EMPTY_CATEGORY(false, 2009, "존재하지 않는 카테고리입니다."),
 
 
     // users
@@ -48,8 +49,10 @@ public enum BaseResponseStatus {
     PATCH_USERS_EMPTY_PASSWORD(false,2024, "비밀번호를 입력해주세요"),
 
     // search
-    NO_RESULT_FOUND(false, 2030, "검색 결과가 없습니다."),
-
+    SEARCH_EMPTY_KEYWORD(false, 2030, "검색할 키워드를 입력해주세요."),
+    NO_RESULT_FOUND(false, 2031, "검색 결과가 없습니다."),
+    SEARCH_EMPTY_TAG_ID(false, 2032, "해시태그 아이디 값을 확인해주세요"),
+    EMPTY_TAG(false, 2033, "존재하지 않는 해시태그 입니다."),
 
     // store
     POST_STORE_EMPTY_CATEGORY(false,2040,"카테고리를 선택해주세요."),
@@ -79,9 +82,6 @@ public enum BaseResponseStatus {
     EMPTY_CERT_NUMBER(false, 2074, "인증번호를 입력해 주세요."),
 
 
-    // search
-    SEARCH_EMPTY_KEYWORD(false, 2080, "검색할 키워드를 입력해주세요."),
-    SEARCH_EMPTY_TAG_ID(false, 2081, "해시태그 아이디 값을 확인해주세요"),
 
 
     /**

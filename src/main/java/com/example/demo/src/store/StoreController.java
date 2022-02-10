@@ -45,11 +45,15 @@ public class StoreController {
     @ResponseBody
     @GetMapping("/{userIdx}/{categoryIdx}")
 
-    public BaseResponse<List<GetStoreRes>> getCategory (@PathVariable("userIdx") int userIdx, @PathVariable("categoryIdx") int categoryIdx, @RequestParam(value="starRating", required = false, defaultValue = "N") String starRating, @RequestParam(value = "deliveryService", required = false, defaultValue = "N") String deliveryService, @RequestParam(defaultValue = "1") int page, @RequestParam int pageSize) {
+    public BaseResponse<List<GetStoreRes>> getCategory (@PathVariable int userIdx, @PathVariable int categoryIdx, @RequestParam(required = false, defaultValue = "N") String starRating, @RequestParam(required = false, defaultValue = "N") String deliveryService, @RequestParam(defaultValue = "1") int page, @RequestParam int pageSize) {
         try {
 
             if (userIdx <= 0) {
                 return new BaseResponse<>(USERS_EMPTY_USER_ID);
+            }
+
+            if (userIdx != jwtService.getUserIdx()) {
+                return new BaseResponse<>(INVALID_USER_JWT);
             }
 
             if (categoryIdx <= 0) {
@@ -70,12 +74,6 @@ public class StoreController {
 
             if (pageSize <= 0) {
                 return new BaseResponse<>(EMPTY_PAGE_SIZE);
-            }
-
-            int userIdxByJwt = jwtService.getUserIdx();
-
-            if (userIdx != userIdxByJwt) {
-                return new BaseResponse<>(INVALID_USER_JWT);
             }
 
             List<GetStoreRes> getStoreRes;
