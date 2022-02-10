@@ -3,6 +3,7 @@ package com.example.demo.src.review;
 import com.example.demo.config.BaseException;
 import com.example.demo.src.AwsS3Service;
 import com.example.demo.src.review.model.*;
+import com.example.demo.src.user.UserProvider;
 import com.example.demo.utils.JwtService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,20 +25,31 @@ public class ReviewService {
     private final ReviewProvider reviewProvider;
     private final AwsS3Service awsS3Service;
     private final StoreDao storeDao;
+    private final UserProvider userProvider;
 
 
     @Autowired
-    public ReviewService(ReviewDao reviewDao, ReviewProvider reviewProvider, AwsS3Service awsS3Service, StoreDao storeDao){
+    public ReviewService(ReviewDao reviewDao, ReviewProvider reviewProvider, AwsS3Service awsS3Service, StoreDao storeDao, UserProvider userProvider){
         this.reviewDao = reviewDao;
         this.reviewProvider = reviewProvider;
         this.awsS3Service = awsS3Service;
         this.storeDao = storeDao;
+        this.userProvider = userProvider;
     }
 
     //리뷰 삭제
     @Transactional(rollbackFor = BaseException.class)
     public void deleteReview(int userIdx, int reviewIdx) throws BaseException{
         try{
+            if(userProvider.checkUser(userIdx)==0){
+                throw new BaseException(EMPTY_USER);
+            }
+
+            if(reviewProvider.checkReview(userIdx, reviewIdx)==0){
+                throw new BaseException(EMPTY_REVIEW);
+            }
+
+
             List<Integer> reviewTagIdx = reviewProvider.getReviewTagIdx(userIdx,reviewIdx);
             for(int idx : reviewTagIdx){
                 reviewDao.deleteReviewTag(idx);
@@ -61,11 +73,11 @@ public class ReviewService {
         }
     }
     @Transactional(rollbackFor = BaseException.class)
-    public int createReview(PostReviewReq postReviewReq, List<String> fileNameList) throws BaseException{
+    public PostReviewRes createReview(PostReviewReq postReviewReq, List<String> fileNameList) throws BaseException{
         try{
             int reviewIdx = reviewDao.createReview(postReviewReq);
 
-            if(!(fileNameList.isEmpty())) {
+            if(!(fileNameList.isEmpty()) && fileNameList!=null) {
                 for (String imgURL : fileNameList) {
                     storeDao.createImage(imgURL, reviewIdx);
                 }
@@ -82,7 +94,7 @@ public class ReviewService {
                 }
             }
 
-            return reviewIdx;
+            return new PostReviewRes(reviewIdx, fileNameList) ;
         } catch (Exception exception){
             throw new BaseException(DATABASE_ERROR);
         }

@@ -78,6 +78,7 @@ public enum BaseResponseStatus {
     AUTH_INVALID_PHONENUMBER(false,2073,"올바른 휴대폰번호를 입력해주세요."),
     EMPTY_CERT_NUMBER(false, 2074, "인증번호를 입력해 주세요."),
 
+
     // search
     SEARCH_EMPTY_KEYWORD(false, 2080, "검색할 키워드를 입력해주세요."),
     SEARCH_EMPTY_TAG_ID(false, 2081, "해시태그 아이디 값을 확인해주세요"),

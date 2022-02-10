@@ -37,10 +37,13 @@ public class ReviewController {
         this.reviewService = reviewService;
         this.awsS3Service = awsS3Service;
     }
-
+    // 메인화면 최근 리뷰
     @GetMapping("/{userIdx}")
     public BaseResponse<List<GetMainScreenReviewRes>> getMainScreenReview(@PathVariable("userIdx") int userIdx) {
         try {
+            if (userIdx <= 0) {
+                return new BaseResponse<>(USERS_EMPTY_USER_ID);
+            }
             if (userIdx != jwtService.getUserIdx()) {
                 return new BaseResponse<>(INVALID_USER_JWT);
             }
@@ -53,11 +56,22 @@ public class ReviewController {
 
 
 
-
+    // 상세페이지 리뷰
     @GetMapping("/{userIdx}/{storeIdx}")
-    public BaseResponse<?> getDetailReview(@PathVariable("userIdx") int userIdx, @PathVariable("storeIdx") int storeIdx, @RequestParam(name = "page") int page, @RequestParam(name = "pagesize") int pageSize) {
+    public BaseResponse<?> getDetailReview(@PathVariable("userIdx") int userIdx, @PathVariable("storeIdx") int storeIdx, @RequestParam(name = "page") int page, @RequestParam(name = "pageSize") int pageSize) {
         try {
-            System.out.println(page);
+            if(userIdx <= 0){
+                return new BaseResponse<>(USERS_EMPTY_USER_ID);
+            }
+            if (storeIdx <= 0) {
+                return new BaseResponse<>(STORES_EMPTY_STORE_ID);
+            }
+            if (page <= 0) {
+                return new BaseResponse<>(EMPTY_PAGE);
+            }
+            if (pageSize <= 0) {
+                return new BaseResponse<>(EMPTY_PAGE_SIZE);
+            }
             if (userIdx != jwtService.getUserIdx()) {
                 return new BaseResponse<>(INVALID_USER_JWT);
             }
@@ -75,10 +89,10 @@ public class ReviewController {
     @PatchMapping("/{userIdx}/{reviewIdx}/status")
     public BaseResponse<String> deleteReview(@PathVariable int userIdx, @PathVariable int reviewIdx){
         try {
-            if(userIdx==0){
+            if(userIdx<=0){
                 return new BaseResponse<>(USERS_EMPTY_USER_ID);
             }
-            if(reviewIdx==0){
+            if(reviewIdx<=0){
                 return new BaseResponse<>(REVIEWS_EMPTY_REVIEW_ID);
             }
 
@@ -92,37 +106,41 @@ public class ReviewController {
 
             return new BaseResponse<>(result);
 
-        } catch(BaseException exception){
+        } catch(BaseException exception) {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
 
     @ResponseBody
     @PostMapping(value="",consumes = {"multipart/form-data"})
-    public BaseResponse<Integer> createReview(@RequestPart PostReviewReq postReviewReq,
+    public BaseResponse<PostReviewRes> createReview(@RequestPart PostReviewReq postReviewReq,
                                               @RequestPart(required = false) List<MultipartFile> imageFile){
         try{
-            if(postReviewReq.getUserIdx()==0){
+            if(postReviewReq.getUserIdx()<=0){
                 return new BaseResponse<>(USERS_EMPTY_USER_ID);
             }
             int userIdxByJwt = jwtService.getUserIdx();
             if (postReviewReq.getUserIdx()!=userIdxByJwt) {
                 return new BaseResponse<>(INVALID_USER_JWT);
             }
-            if(postReviewReq.getStoreIdx()==0){
+            if(postReviewReq.getStoreIdx()<=0){
                 return new BaseResponse<>(STORES_EMPTY_STORE_ID);
             }
-            if(postReviewReq.getStarRate()==0){
+            if(postReviewReq.getStarRate()<=0){
                 return new BaseResponse<>(POST_STORE_EMPTY_STAR);
             }
-            if(postReviewReq.getContents().isEmpty()){
+            if(postReviewReq.getContents().isEmpty() && postReviewReq.getContents()==null){
                 return new BaseResponse<>(POST_STORE_EMPTY_CONTENTS);
             }
+            int checkNum =1;
             List<String> fileNameList = new ArrayList<>();
-            if(imageFile!=null) fileNameList = awsS3Service.uploadFile(imageFile);
+            for(MultipartFile image:imageFile){
+                if(image.isEmpty()) checkNum=0;
+            }
+            if(checkNum==1) fileNameList=awsS3Service.uploadFile(imageFile);
 
-            int reviewIdx = reviewService.createReview(postReviewReq, fileNameList);
-            return new BaseResponse<>(reviewIdx);
+            PostReviewRes postReviewRes = reviewService.createReview(postReviewReq, fileNameList);
+            return new BaseResponse<>(postReviewRes);
         } catch(BaseException exception){
             return new BaseResponse<>((exception.getStatus()));
         }
@@ -148,7 +166,7 @@ public class ReviewController {
 
             PatchReviewReq patchReviewReq = new PatchReviewReq(review.getStarRate(), review.getContents());
 
-            if (patchReviewReq.getStarRate() == 0) {
+            if (patchReviewReq.getStarRate() <= 0) {
                 return new BaseResponse<>(PATCH_REVIEW_EMPTY_STARRATE);
             }
 
