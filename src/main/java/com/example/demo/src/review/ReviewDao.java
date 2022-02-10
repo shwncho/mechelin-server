@@ -125,12 +125,12 @@ public class ReviewDao {
     }
     // imageUrl이 null인경우 체크
     public List<String> getImageUrl(String str) {
-        if (str == null) return null;
+        if (str == null) return new ArrayList<>();
         else return Arrays.asList(str.split(","));
     }
 
     public List<String> getTag(String str) {
-        if (str == null) return null;
+        if (str == null) return new ArrayList<>();
         else return Arrays.asList(str.split(","));
     }
 
