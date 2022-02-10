@@ -26,7 +26,7 @@ public class ReviewDao {
     public List<GetMainScreenReviewRes> getMainScreenReview(int userIdx) {
         String getMainScreenReviewQuery = "SELECT R.userIdx, S.storeIdx, storeName, starRate, SUBSTR(contents,1,100) as contents, DATE_FORMAT(R.createdAt,'%Y.%c.%d') as createdAt " +
                 "FROM Review as R INNER JOIN Store as S ON R.storeIdx = S.storeIdx " +
-                "WHERE R.userIdx = ? AND R.status = 'a' ORDER BY R.createdAt DESC LIMIT 5";
+                "WHERE R.userIdx = ? AND R.status = 'A' ORDER BY R.createdAt DESC LIMIT 5";
 
         int getMainScreenReviewParams = userIdx;
 
@@ -47,9 +47,8 @@ public class ReviewDao {
     public GetStoreInformationRes getStoreInformation(int userIdx, int storeIdx) {
         String getStoreInformationQuery = "SELECT storeName, address, tel, Round(avg(starRate), 1) AS starRate " +
                 "FROM Store AS S " +
-                "INNER JOIN Review AS R ON R.storeIdx = S.storeIdx " +
-                "INNER JOIN ReviewTag AS RT ON R.reviewIdx = RT.reviewIdx " +
-                "WHERE R.userIdx = ? AND S.storeIdx = ? AND R.status = 'a' ";
+                "LEFT JOIN Review AS R ON R.storeIdx = S.storeIdx " +
+                "WHERE R.userIdx = ? AND S.storeIdx = ? AND R.status = 'A' ";
 
       Object[] getStoreInformationParams = new Object[] {userIdx, storeIdx};
 
@@ -105,7 +104,7 @@ public class ReviewDao {
             public Map extractData(ResultSet rs) throws SQLException, DataAccessException {
                 HashMap<Integer, List<String>> map = new HashMap<>();
                 while(rs.next()) {
-                    map.put(rs.getInt("reviewIdx"), Arrays.asList(rs.getString("tagName").split(",")));
+                    map.put(rs.getInt("reviewIdx"), getTag(rs.getString("tagName")));
                 }
                 return map;
             }
@@ -126,6 +125,11 @@ public class ReviewDao {
     }
     // imageUrl이 null인경우 체크
     public List<String> getImageUrl(String str) {
+        if (str == null) return null;
+        else return Arrays.asList(str.split(","));
+    }
+
+    public List<String> getTag(String str) {
         if (str == null) return null;
         else return Arrays.asList(str.split(","));
     }
