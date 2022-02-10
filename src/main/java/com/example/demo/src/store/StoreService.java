@@ -63,7 +63,7 @@ public class StoreService {
                     }
                 }
             }
-            return new PostStoreRes(postStoreReq.getUserIdx(),storeIdx);
+            return new PostStoreRes(postStoreReq.getUserIdx(),storeIdx,fileNameList);
 
         } catch(Exception exception){
             throw new BaseException(DATABASE_ERROR);
