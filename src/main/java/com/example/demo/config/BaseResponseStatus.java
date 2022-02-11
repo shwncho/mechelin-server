@@ -26,6 +26,8 @@ public enum BaseResponseStatus {
     EMPTY_STORE(false,2006,"존재하지 않는 식당입니다."),
     EMPTY_REVIEW(false,2007,"존재하지 않는 리뷰입니다."),
     INVALID_FILE(false,2008,"잘못된 형식의 파일입니다."),
+    EMPTY_CATEGORY(false, 2009, "존재하지 않는 카테고리입니다."),
+
 
     // users
     USERS_EMPTY_USER_ID(false, 2010, "유저 아이디 값을 확인해주세요."),
@@ -47,8 +49,10 @@ public enum BaseResponseStatus {
     PATCH_USERS_EMPTY_PASSWORD(false,2024, "비밀번호를 입력해주세요"),
 
     // search
-    NO_RESULT_FOUND(false, 2030, "검색 결과가 없습니다."),
-
+    SEARCH_EMPTY_KEYWORD(false, 2030, "검색할 키워드를 입력해주세요."),
+    NO_RESULT_FOUND(false, 2031, "검색 결과가 없습니다."),
+    SEARCH_EMPTY_TAG_ID(false, 2032, "해시태그 아이디 값을 확인해주세요"),
+    EMPTY_TAG(false, 2033, "존재하지 않는 해시태그 입니다."),
 
     // store
     POST_STORE_EMPTY_CATEGORY(false,2040,"카테고리를 선택해주세요."),
@@ -57,12 +61,14 @@ public enum BaseResponseStatus {
     POST_STORE_EMPTY_STAR(false,2043,"식당에 점수를 매겨주세요."),
     POST_STORE_EMPTY_CONTENTS(false,2044,"내용을 입력해주세요."),
     STORES_EMPTY_STORE_ID(false,2045,"식당 아이디 값을 확인해주세요."),
+    STORE_EMPTY_CATEGORY_ID(false, 2046, "카테고리 아이디 값을 확인해주세요"),
+    STORE_INVALID_STAR_RATING(false, 2047, "starRating 값을 확인해주세요."),
+    STORE_INVALID_DELIVERY_SERVICE(false, 2048, "deliveryService 값을 확인해주세요."),
+
     //reviews
     REVIEWS_EMPTY_REVIEW_ID(false,2050,"리뷰 아이디 값을 확인해주세요."),
-
-    // reviews
-    PATCH_REVIEW_EMPTY_STARRATE(false, 2050, "별점을 설정해주세요."),
-    PATCH_REVIEW_EMPTY_CONTENTS(false, 2051, "내용을 입력해주세요."),
+    PATCH_REVIEW_EMPTY_STARRATE(false, 2051, "별점을 설정해주세요."),
+    PATCH_REVIEW_EMPTY_CONTENTS(false, 2052, "내용을 입력해주세요."),
 
     // [PATCH] / users
     PATCH_USERS_STATUS_INVALID_PASSWORD(false,2060, "비밀번호가 틀렸습니다."),
@@ -74,6 +80,8 @@ public enum BaseResponseStatus {
     POST_AUTH_FAIL_SMS(false, 2072, "인증문자 전송에 실패했습니다 관리자에게 문의해주세요."),
     AUTH_INVALID_PHONENUMBER(false,2073,"올바른 휴대폰번호를 입력해주세요."),
     EMPTY_CERT_NUMBER(false, 2074, "인증번호를 입력해 주세요."),
+
+
 
 
     /**

@@ -45,12 +45,35 @@ public class StoreController {
     @ResponseBody
     @GetMapping("/{userIdx}/{categoryIdx}")
 
-    public BaseResponse<List<GetStoreRes>> getCategory (@PathVariable("userIdx") int userIdx, @PathVariable("categoryIdx") int categoryIdx, @RequestParam(value="starRating", required = false, defaultValue = "N") String starRating, @RequestParam(value = "deliveryService", required = false, defaultValue = "N") String deliveryService, @RequestParam(defaultValue = "1") int page, @RequestParam int pageSize) {
+    public BaseResponse<List<GetStoreRes>> getCategory (@PathVariable int userIdx, @PathVariable int categoryIdx, @RequestParam(required = false, defaultValue = "N") String starRating, @RequestParam(required = false, defaultValue = "N") String deliveryService, @RequestParam(defaultValue = "1") int page, @RequestParam int pageSize) {
         try {
-            int userIdxByJwt = jwtService.getUserIdx();
 
-            if (userIdx != userIdxByJwt) {
+            if (userIdx <= 0) {
+                return new BaseResponse<>(USERS_EMPTY_USER_ID);
+            }
+
+            if (userIdx != jwtService.getUserIdx()) {
                 return new BaseResponse<>(INVALID_USER_JWT);
+            }
+
+            if (categoryIdx <= 0) {
+                return new BaseResponse<>(STORE_EMPTY_CATEGORY_ID);
+            }
+
+            if (!starRating.equals("Y") && !starRating.equals("N")) {
+                return new BaseResponse<>(STORE_INVALID_STAR_RATING);
+            }
+
+            if (!deliveryService.equals("Y") && !deliveryService.equals("N")) {
+                return new BaseResponse<>(STORE_INVALID_DELIVERY_SERVICE);
+            }
+
+            if (page <= 0) {
+                return new BaseResponse<>(EMPTY_PAGE);
+            }
+
+            if (pageSize <= 0) {
+                return new BaseResponse<>(EMPTY_PAGE_SIZE);
             }
 
             List<GetStoreRes> getStoreRes;

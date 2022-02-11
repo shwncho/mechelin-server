@@ -477,5 +477,11 @@ public class StoreDao {
         this.jdbcTemplate.update(Query,storeIdx);
     }
 
+    // 카테고리 확인
+    public int checkCategory(int categoryIdx) {
+        String query = "select exists(select categoryIdx from Category where categoryIdx = ? and status = 'A')";
+        int param = categoryIdx;
+        return this.jdbcTemplate.queryForObject(query, int.class, param);
+    }
 }
 

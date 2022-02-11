@@ -8,7 +8,9 @@ import com.example.demo.src.review.model.*;
 import com.example.demo.utils.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
 import static com.example.demo.config.BaseResponseStatus.*;
+
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -51,6 +53,7 @@ public class ReviewController {
             return new BaseResponse<>(exception.getStatus());
         }
     }
+
 
 
     // 상세페이지 리뷰
@@ -148,10 +151,17 @@ public class ReviewController {
     @PatchMapping("/{userIdx}/{reviewIdx}")
     public BaseResponse<String> editReview(@PathVariable("userIdx") int userIdx, @PathVariable("reviewIdx") int reviewIdx, @RequestBody Review review) {
         try {
-            int userIdxByJwt = jwtService.getUserIdx();
 
-            if (userIdx != userIdxByJwt) {
+            if (userIdx <= 0) {
+                return new BaseResponse<>(USERS_EMPTY_USER_ID);
+            }
+
+            if (userIdx != jwtService.getUserIdx()) {
                 return new BaseResponse<>(INVALID_USER_JWT);
+            }
+
+            if (reviewIdx <= 0) {
+                return new BaseResponse<>(REVIEWS_EMPTY_REVIEW_ID);
             }
 
             PatchReviewReq patchReviewReq = new PatchReviewReq(review.getStarRate(), review.getContents());
@@ -164,7 +174,7 @@ public class ReviewController {
                 return new BaseResponse<>(PATCH_REVIEW_EMPTY_CONTENTS);
             }
 
-            reviewService.editReview(patchReviewReq, reviewIdx);
+            reviewService.editReview(patchReviewReq, userIdx, reviewIdx);
 
             String result = "리뷰 수정 성공했습니다.";
             return new BaseResponse<>(result);
