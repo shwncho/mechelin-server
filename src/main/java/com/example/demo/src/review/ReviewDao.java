@@ -26,7 +26,7 @@ public class ReviewDao {
     public List<GetMainScreenReviewRes> getMainScreenReview(int userIdx) {
         String getMainScreenReviewQuery = "SELECT R.userIdx, S.storeIdx, storeName, starRate, SUBSTR(contents,1,100) as contents, DATE_FORMAT(R.createdAt,'%Y.%c.%d') as createdAt " +
                 "FROM Review as R INNER JOIN Store as S ON R.storeIdx = S.storeIdx " +
-                "WHERE R.userIdx = ? AND R.status = 'a' ORDER BY R.createdAt DESC LIMIT 5";
+                "WHERE R.userIdx = ? AND R.status = 'A' ORDER BY R.createdAt DESC LIMIT 5";
 
         int getMainScreenReviewParams = userIdx;
 
@@ -47,9 +47,8 @@ public class ReviewDao {
     public GetStoreInformationRes getStoreInformation(int userIdx, int storeIdx) {
         String getStoreInformationQuery = "SELECT storeName, address, tel, Round(avg(starRate), 1) AS starRate " +
                 "FROM Store AS S " +
-                "INNER JOIN Review AS R ON R.storeIdx = S.storeIdx " +
-                "INNER JOIN ReviewTag AS RT ON R.reviewIdx = RT.reviewIdx " +
-                "WHERE R.userIdx = ? AND S.storeIdx = ? AND R.status = 'a' ";
+                "LEFT JOIN Review AS R ON R.storeIdx = S.storeIdx " +
+                "WHERE R.userIdx = ? AND S.storeIdx = ? AND R.status = 'A' ";
 
       Object[] getStoreInformationParams = new Object[] {userIdx, storeIdx};
 
@@ -72,7 +71,6 @@ public class ReviewDao {
         }
         int start = (page - 1) * pageSize;
 
-        System.out.println(page);
 
         String getReviewQuery = "SELECT R.reviewIdx, group_concat(imageUrl) AS imageUrl, contents, " +
         "CASE WEEKDAY(R.createdAt) " +
@@ -86,20 +84,19 @@ public class ReviewDao {
         "END AS createdAt, " +
         "starRate " +
         "FROM Review as R " +
-        "INNER JOIN ReviewImage AS RI ON R.reviewIdx = RI.reviewIdx " +
-        "WHERE R.userIdx = ? AND R.storeIdx = ? AND R.status = 'a' " +
+        "LEFT JOIN ReviewImage AS RI ON R.reviewIdx = RI.reviewIdx " +
+        "WHERE R.userIdx = ? AND R.storeIdx = ? AND R.status = 'A' " +
         "GROUP BY R.reviewIdx, R.createdAt " +
         "ORDER BY R.createdAt DESC " +
         "LIMIT ?,?";
 
         String getTagQuery = "SELECT R.reviewIdx, GROUP_CONCAT(tagName) as tagName " +
                 "FROM Review as R " +
-                "INNER JOIN ReviewTag RT on R.reviewIdx = RT.reviewIdx " +
-                "INNER JOIN Tag T on RT.tagIdx = T.tagIdx " +
-                "WHERE R.userIdx = ? AND R.storeIdx = ? AND R.status = 'a' " +
+                "LEFT JOIN ReviewTag RT on R.reviewIdx = RT.reviewIdx " +
+                "LEFT JOIN Tag T on RT.tagIdx = T.tagIdx " +
+                "WHERE R.userIdx = ? AND R.storeIdx = ? AND R.status = 'A' " +
                 "GROUP BY R.reviewIdx, R.createdAt " +
-                "ORDER BY R.createdAt DESC " +
-                "LIMIT ?,?";
+                "ORDER BY R.createdAt DESC ";
 
         // 리뷰인덱스에 해당하는 태그 저장
         Map<Integer, List<String>> tagByReviewIdx = this.jdbcTemplate.query(getTagQuery, new ResultSetExtractor<Map>() {
@@ -107,26 +104,36 @@ public class ReviewDao {
             public Map extractData(ResultSet rs) throws SQLException, DataAccessException {
                 HashMap<Integer, List<String>> map = new HashMap<>();
                 while(rs.next()) {
-                    map.put(rs.getInt("reviewIdx"), Arrays.asList(rs.getString("tagName").split(",")));
+                    map.put(rs.getInt("reviewIdx"), getTag(rs.getString("tagName")));
                 }
                 return map;
             }
-        }, userIdx, storeIdx, start, pageSize);
+        }, userIdx, storeIdx);
 
         return this.jdbcTemplate.query(getReviewQuery,
                 (rs, cnt) -> new GetReviewRes(
                         rs.getInt("reviewIdx"),
-                        Arrays.asList(rs.getString("imageUrl").split(",")),
+                        getImageUrl(rs.getString("imageUrl")),
                         rs.getString("contents"),
                         rs.getString("createdAt"),
                         tagByReviewIdx.get(rs.getInt("reviewIdx")),
                         rs.getDouble("starRate")
-
                 ),
                 userIdx, storeIdx, start, pageSize
         );
 
     }
+    // imageUrl이 null인경우 체크
+    public List<String> getImageUrl(String str) {
+        if (str == null) return new ArrayList<>();
+        else return Arrays.asList(str.split(","));
+    }
+
+    public List<String> getTag(String str) {
+        if (str == null) return new ArrayList<>();
+        else return Arrays.asList(str.split(","));
+    }
+
     public List<Integer> getReviewTagIdx(int userIdx, int reviewIdx){
         String Query ="select reviewTagIdx\n" +
                 "    from Review\n" +

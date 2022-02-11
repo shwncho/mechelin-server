@@ -64,10 +64,11 @@ public class ReviewProvider {
             return result;
         } catch (BaseException baseException) {
             throw baseException;
-        } catch (Exception exception) {
+        }catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+
 
     public List<Integer> getReviewImageIdx(int userIdx, int reviewIdx) throws BaseException{
         try{

@@ -42,19 +42,17 @@ public class UserProvider {
         } catch (Exception ignored) {
             throw new BaseException(PASSWORD_DECRYPTION_ERROR);
         }
-
         if (postLoginReq.getPassword().equals(password)) {
             if(checkStatus(postLoginReq.getEmail()).equals("D")) {
                 throw new BaseException(POST_USERS_INACTIVE_ACCOUNT);
             }
-
             int userIdx = userDao.getPwd(postLoginReq).getUserIdx();
             String jwt = jwtService.createJwt(userIdx);
             return new PostLoginRes(userIdx, jwt);
-
         } else {
             throw new BaseException(FAILED_TO_LOGIN);
         }
+
     }
     @Transactional(readOnly = true)
     public int checkUser(int userIdx) throws BaseException{

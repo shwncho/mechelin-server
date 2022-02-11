@@ -82,6 +82,7 @@ public class UserDao {
 
     // 프로필: 해당 User의 프로필 페이지를 조회한다.
     public GetProfileRes getProfile(int userIdx){
+
         String getProfileQuery= "SELECT nickName, email, storeCnt, reviewCnt" +
                                 "    FROM("+
                                         "select u.userIdx, u.email, u.nickName"+
