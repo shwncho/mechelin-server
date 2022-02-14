@@ -64,6 +64,6 @@ Google Play [here](url)
 ___
 
 Frontend github [link](url)  
-Android github [link](url)
+Backend github [link](url)
 
 
