@@ -39,7 +39,7 @@ public class StoreService {
         this.reviewDao = reviewDao;
         this.userProvider = userProvider;
     }
-    @Transactional(rollbackFor = BaseException.class)
+    @Transactional(rollbackFor = Exception.class)
     public PostStoreRes createStore(PostStoreReq postStoreReq, List<String> fileNameList) throws BaseException{
         try{
 
@@ -70,7 +70,7 @@ public class StoreService {
         }
     }
 
-    @Transactional(rollbackFor = BaseException.class)
+    @Transactional(rollbackFor = Exception.class)
     public void deleteStore(int userIdx, int storeIdx) throws BaseException{
         try{
             if(userProvider.checkUser(userIdx)==0){

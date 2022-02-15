@@ -83,7 +83,6 @@ public enum BaseResponseStatus {
 
 
 
-
     /**
      * 3000 : Response 오류
      */
