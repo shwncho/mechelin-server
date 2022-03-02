@@ -1,6 +1,6 @@
 # 🍽 나만의 맛집 일기, 맛집  기록 어플 me슐랭
 <div align=center>
-  <img width="266" alt="미슐랭" src="https://user-images.githubusercontent.com/88089316/149492971-00cafd32-c265-4ca9-84c0-5aec16510b77.png">
+  <img width="266" alt="미슐랭" src="https://user-images.githubusercontent.com/83093525/156397092-3f29a231-0989-4232-8154-93f97fdff213.png">
 </div>
 
 <div align=center>
@@ -45,25 +45,16 @@
 <br>
 
 # 기능 소개
-시연 동영상 [link](url)  
+시연 동영상 [[link](https://youtu.be/NiwcdXF6i1w)]  
 <br>
 
 |식당 저장 및 리뷰 작성|카테고리 리스트|
 |:--:|:--:|
-|<img width="266" alt="미슐랭" src="https://user-images.githubusercontent.com/83093525/153853030-bab2ac0b-4f17-46b7-abc5-4051ecc24ecb.png">&nbsp; |<img width="266" alt="미슐랭" src=https://user-images.githubusercontent.com/83093525/153853599-170eb736-e3eb-41f7-9d9b-9b28828476bc.png>&nbsp;|
-|나만의 별점,리뷰와 함께 식당 정보를 저장할 수 있습니다. |카테고리에 따른 별점순, 날짜순으로 식당 정렬이 가능합니다.|
+|<img width="266" alt="미슐랭" src="https://user-images.githubusercontent.com/83093525/156397618-0072f024-aa77-45ba-b3d2-31702c2197ef.png">&nbsp; |<img width="266" alt="미슐랭" src=https://user-images.githubusercontent.com/83093525/156397731-670f88c2-82ac-49a0-95ad-ae7ac3e0bb7a.png>&nbsp;|
+|나만의 별점,리뷰와 함께 식당 정보를 저장할 수 있습니다.&nbsp;&nbsp;&nbsp;&nbsp;|카테고리에 따른 별점순, 날짜순으로 식당 정렬이 가능합니다.|
 
 |검색 기능|식당 상세페이지|
 |:--:|:--:|
-|<img width="266" alt="미슐랭" src=https://user-images.githubusercontent.com/83093525/153853902-c74d7c2e-9b21-4d5f-afa8-e4ae9af4f298.png>&nbsp; |<img width="266" alt="미슐랭" src=https://user-images.githubusercontent.com/83093525/153854486-bb6ed637-5236-4daa-b346-b368cfd74fbc.png>&nbsp;|
-|식당 이름 또는 해시태그를 통해 식당을 검색할 수 있습니다. |저장한 맛집의 정보와 리뷰를 확인할 수 있습니다.|
-
+|<img width="266" alt="미슐랭" src=https://user-images.githubusercontent.com/83093525/156398071-26066ea7-5673-4151-86c3-0f1d25016efa.png>&nbsp; |<img width="266" alt="미슐랭" src=https://user-images.githubusercontent.com/83093525/156398149-7cf7488e-a37c-4349-837d-c9db023c111e.png>&nbsp;|
+|식당 이름 또는 해시태그를 통해 식당을 검색할 수 있습니다. |저장한 맛집의 정보와 리뷰를 확인할 수 있습니다.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 ___
-
-Google Play [here](url)
-___
-
-Frontend github [link](url)  
-Backend github [link](url)
-
-
